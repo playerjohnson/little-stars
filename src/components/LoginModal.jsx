@@ -124,6 +124,18 @@ export default function LoginModal({ onSuccess, onClose }) {
               </button>
             </div>
 
+            <div style={{ marginTop: 16, paddingTop: 16, borderTop: '1px solid var(--clr-border)' }}>
+              <p style={{ color: 'var(--clr-text-faint)', fontSize: 12, marginBottom: 8 }}>
+                First time? Set up your admin account:
+              </p>
+              <button
+                type="button"
+                className="auth-link-btn"
+                onClick={() => { setMode('setup'); setError(''); setPassword(''); }}
+              >
+                Create Admin Account →
+              </button>
+            </div>
           </form>
         ) : (
           <form onSubmit={handleSetup}>
