@@ -10,6 +10,7 @@ import LoginModal from './components/LoginModal';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import CancellationPolicy from './components/CancellationPolicy';
 import CookieConsent, { CookiePreferenceLink } from './components/CookieConsent';
+import Guides from './components/Guides';
 import WhatsAppButton from './components/WhatsAppButton';
 import { getCurrentUser, onAuthStateChange, signOut } from './lib/auth';
 import './styles/global.css';
@@ -57,6 +58,7 @@ export default function App() {
           <Route path="/book" element={<BookingPage />} />
           <Route path="/about" element={<AboutMe />} />
           <Route path="/status" element={<BookingStatus />} />
+          <Route path="/guides" element={<Guides />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/cancellation" element={<CancellationPolicy />} />
           <Route path="/admin" element={
@@ -71,6 +73,7 @@ export default function App() {
         <p>Little Stars Babysitting © {new Date().getFullYear()} · Made with 💛</p>
         <div className="footer-links">
           <Link to="/about">About</Link>
+          <Link to="/guides">Help & Guides</Link>
           <Link to="/cancellation">Cancellation Policy</Link>
           <Link to="/privacy">Privacy Policy</Link>
           <CookiePreferenceLink />

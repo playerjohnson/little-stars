@@ -67,6 +67,7 @@ export default function Home() {
           <Link to="/book" className="btn btn-primary">View Calendar</Link>
           <Link to="/status" className="btn btn-outline">Check Booking Status</Link>
         </div>
+        <Link to="/guides" className="cta-help-link">📖 New here? Read our booking guides</Link>
       </div>
     </div>
   );
