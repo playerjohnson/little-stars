@@ -2,10 +2,10 @@ import { Link } from 'react-router-dom';
 import Reviews from './Reviews';
 
 const FEATURES = [
+  { icon: '🏠', title: 'In Your Home', desc: 'All sessions take place at your home — your children stay in their own environment' },
   { icon: '🕐', title: 'Flexible Hours', desc: 'Morning, afternoon, and evening slots available to fit your schedule' },
-  { icon: '💝', title: 'Experienced Care', desc: 'Trained in first aid with years of childcare experience' },
+  { icon: '💝', title: 'Experienced Care', desc: 'DBS checked, first aid trained, with years of childcare experience' },
   { icon: '📱', title: 'Easy Booking', desc: 'Pick a date, place your bid, and get a quick response' },
-  { icon: '💷', title: 'Prices Start From', desc: 'Competitive bidding — set your rate and get the slot' },
 ];
 
 const STEPS = [
@@ -22,8 +22,9 @@ export default function Home() {
         <span className="hero-star">⭐</span>
         <h1>Little Stars<br />Babysitting</h1>
         <p>
-          Trusted childcare with flexible scheduling. Browse available dates,
-          place your bid, and secure the slot that works for your family.
+          Trusted in-home childcare with flexible scheduling. I come to you so
+          your children stay comfortable. Browse available dates, place your bid,
+          and secure the slot that works for your family.
         </p>
         <div className="hero-buttons">
           <Link to="/book" className="btn btn-primary">Book Now</Link>

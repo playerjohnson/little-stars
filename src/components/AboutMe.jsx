@@ -19,8 +19,9 @@ export default function AboutMe() {
           <h3 className="about-section-title">👋 A Bit About Me</h3>
           <p className="about-text">
             I'm a friendly, reliable babysitter with a real passion for childcare.
-            I love keeping children entertained with creative activities, games,
-            and storytelling. Every child is different, and I always make sure
+            I come to your home so your children can stay in a familiar, comfortable
+            environment. I love keeping children entertained with creative activities,
+            games, and storytelling. Every child is different, and I always make sure
             they feel safe, happy, and have lots of fun!
           </p>
         </div>
@@ -28,6 +29,13 @@ export default function AboutMe() {
         <div className="card">
           <h3 className="about-section-title">📋 Qualifications & Experience</h3>
           <div className="about-badges">
+            <div className="about-badge">
+              <span className="about-badge-icon">🏠</span>
+              <div>
+                <div className="about-badge-title">In-Home Service</div>
+                <div className="about-badge-desc">All sessions at your home</div>
+              </div>
+            </div>
             <div className="about-badge">
               <span className="about-badge-icon">🏥</span>
               <div>
