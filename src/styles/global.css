@@ -1558,6 +1558,107 @@ body {
   color: #fff;
 }
 
+/* ─── Cancellation Modal ──────────────── */
+
+.admin-cancel-info {
+  margin-top: 10px;
+  padding: 10px 12px;
+  background: #fef2f2;
+  border: 1px solid #fee2e2;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+}
+
+.admin-cancel-tag {
+  color: var(--clr-danger);
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.admin-cancel-fee {
+  color: var(--clr-text-muted);
+}
+
+.cancel-modal {
+  max-width: 440px;
+  text-align: center;
+}
+
+.cancel-modal-header {
+  margin-bottom: 16px;
+}
+
+.cancel-booking-summary {
+  background: var(--clr-surface-muted);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  margin-bottom: 16px;
+}
+
+.cancel-policy-tier {
+  border-left: 4px solid var(--clr-border);
+  padding: 10px 14px;
+  text-align: left;
+  margin-bottom: 12px;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  background: var(--clr-surface-muted);
+}
+
+.cancel-policy-label {
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+
+.cancel-policy-hours {
+  font-size: 12px;
+  color: var(--clr-text-faint);
+}
+
+.cancel-message {
+  font-size: 14px;
+  color: var(--clr-text-muted);
+  line-height: 1.6;
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.cancel-fee-box {
+  background: #fef2f2;
+  border: 1px solid #fee2e2;
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  margin-bottom: 20px;
+}
+
+.cancel-fee-free {
+  background: #f0faf4;
+  border-color: #d1fae5;
+}
+
+.cancel-fee-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  padding: 4px 0;
+}
+
+.cancel-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cancel-info-badge {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--clr-text-faint);
+  background: var(--clr-surface-muted);
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+}
+
 /* ─── Guides Page ─────────────────────── */
 
 .guides-grid {

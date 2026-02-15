@@ -271,6 +271,23 @@ export default function AdminDashboard({ user, onLogout }) {
                               <div className="accept-note">Accepting will auto-decline other overlapping bids</div>
                             </>
                           )}
+                          {booking.status === 'cancelled' && booking.cancellation_tier && (
+                            <div className="admin-cancel-info">
+                              <div className="admin-cancel-tag">
+                                🚫 Cancelled by customer
+                                {booking.cancelled_at && (
+                                  <span> · {new Date(booking.cancelled_at).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</span>
+                                )}
+                              </div>
+                              <div className="admin-cancel-fee">
+                                {booking.cancellation_fee > 0 ? (
+                                  <span>Fee owed: <strong>£{parseFloat(booking.cancellation_fee).toFixed(2)}</strong> ({booking.cancellation_tier} rate)</span>
+                                ) : (
+                                  <span>No charge (24hr+ notice)</span>
+                                )}
+                              </div>
+                            </div>
+                          )}
                         </div>
                       );
                     })}

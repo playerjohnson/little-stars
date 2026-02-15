@@ -101,6 +101,23 @@ export async function getBookingsByEmail(email) {
   return data;
 }
 
+export async function cancelBooking(id, { tier, fee, cancelledAt }) {
+  const { data, error } = await supabase
+    .from('bookings')
+    .update({
+      status: 'cancelled',
+      cancellation_tier: tier,
+      cancellation_fee: fee,
+      cancelled_at: cancelledAt,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', id)
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+}
+
 // ─── Reviews ─────────────────────────────────────────────────
 
 export async function getVisibleReviews() {
