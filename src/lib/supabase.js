@@ -1,7 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
 
-// Replace these with your Supabase project credentials
-// Found in: Supabase Dashboard > Settings > API
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://jgvlpxbfvqavhkotggwj.supabase.co';
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpndmxweGJmdnFhdmhrb3RnZ3dqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExNjQ0MzgsImV4cCI6MjA4Njc0MDQzOH0.RVQ_AREtwnBDQsxr_BSneCC7i0-d9APakAvYwjBLOGA';
 
@@ -43,7 +41,7 @@ export async function removeAvailabilitySlot(id) {
   if (error) throw error;
 }
 
-// ─── Bookings API ────────────────────────────────────────────
+// ─── Bookings / Bids API ─────────────────────────────────────
 
 export async function getBookings(startDate, endDate) {
   const { data, error } = await supabase
@@ -52,7 +50,7 @@ export async function getBookings(startDate, endDate) {
     .gte('date', startDate)
     .lte('date', endDate)
     .order('date')
-    .order('start_time');
+    .order('bid_amount', { ascending: false });
 
   if (error) throw error;
   return data;
@@ -63,7 +61,7 @@ export async function getAllBookings() {
     .from('bookings')
     .select('*')
     .order('date', { ascending: false })
-    .order('created_at', { ascending: false });
+    .order('bid_amount', { ascending: false });
 
   if (error) throw error;
   return data;
@@ -90,4 +88,33 @@ export async function updateBookingStatus(id, status) {
 
   if (error) throw error;
   return data;
+}
+
+/**
+ * Accept a bid: confirm it and auto-decline all other pending bids
+ * that overlap the same time window on the same date.
+ */
+export async function acceptBid(bid) {
+  const { data: accepted, error: acceptError } = await supabase
+    .from('bookings')
+    .update({ status: 'confirmed', updated_at: new Date().toISOString() })
+    .eq('id', bid.id)
+    .select()
+    .single();
+
+  if (acceptError) throw acceptError;
+
+  // Decline other pending bids on the same date with overlapping times
+  const { error: declineError } = await supabase
+    .from('bookings')
+    .update({ status: 'declined', updated_at: new Date().toISOString() })
+    .eq('date', bid.date)
+    .eq('status', 'pending')
+    .neq('id', bid.id)
+    .lt('start_time', bid.end_time)
+    .gt('end_time', bid.start_time);
+
+  if (declineError) throw declineError;
+
+  return accepted;
 }

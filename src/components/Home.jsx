@@ -3,14 +3,14 @@ import { useNavigate } from 'react-router-dom';
 const FEATURES = [
   { icon: '🕐', title: 'Flexible Hours', desc: 'Morning, afternoon, and evening slots available to fit your schedule' },
   { icon: '💝', title: 'Experienced Care', desc: 'Trained in first aid with years of childcare experience' },
-  { icon: '📱', title: 'Easy Booking', desc: 'Pick a date, choose a time slot, and book in seconds' },
-  { icon: '💷', title: 'Fair Rates', desc: 'Transparent hourly pricing with no hidden fees' },
+  { icon: '📱', title: 'Easy Booking', desc: 'Pick a date, place your bid, and get a quick response' },
+  { icon: '💷', title: 'Prices Start From', desc: 'Competitive bidding — set your rate and get the slot' },
 ];
 
 const STEPS = [
   { step: '1', label: 'Check Calendar', desc: 'Green dots show available dates' },
-  { step: '2', label: 'Pick a Slot', desc: 'Choose a time that works for you' },
-  { step: '3', label: 'Book & Confirm', desc: 'Fill in your details and you\'re set!' },
+  { step: '2', label: 'Place a Bid', desc: 'Choose a slot and offer your hourly rate' },
+  { step: '3', label: 'Get Confirmed', desc: 'Best bid wins — you\'ll know quickly!' },
 ];
 
 export default function Home() {
@@ -22,8 +22,8 @@ export default function Home() {
         <div className="hero-emoji">👶✨</div>
         <h1>Caring, Reliable<br />Babysitting</h1>
         <p>
-          Trusted childcare with flexible scheduling. Check my availability
-          and book a session that works for your family.
+          Trusted childcare with flexible scheduling. Browse available dates,
+          place your bid, and secure the slot that works for your family.
         </p>
         <div className="hero-buttons">
           <button className="btn btn-primary" onClick={() => navigate('/book')}>

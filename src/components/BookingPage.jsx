@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import Calendar from './Calendar';
 import {
-  DAYS_FULL, MONTHS, TIME_SLOTS, formatTime, formatDateDisplay, timeToMinutes, getMonthRange, dateToKey,
+  DAYS_FULL, MONTHS, TIME_SLOTS, formatTime, timeToMinutes,
 } from '../lib/utils';
 import { getAvailability, getBookings, createBooking } from '../lib/supabase';
 
-const EMPTY_FORM = { name: '', email: '', phone: '', children: '1', startTime: '', endTime: '', notes: '' };
+const EMPTY_FORM = { name: '', email: '', phone: '', children: '1', startTime: '', endTime: '', bidAmount: '', notes: '' };
 
 export default function BookingPage() {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -17,17 +17,14 @@ export default function BookingPage() {
   const [form, setForm] = useState(EMPTY_FORM);
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [bidError, setBidError] = useState('');
 
-  // Load data
-  useEffect(() => {
-    loadData();
-  }, []);
+  useEffect(() => { loadData(); }, []);
 
   async function loadData() {
     setLoading(true);
     setError(null);
     try {
-      // Load a wide range — 3 months back and forward
       const now = new Date();
       const start = `${now.getFullYear()}-01-01`;
       const end = `${now.getFullYear() + 1}-12-31`;
@@ -38,7 +35,7 @@ export default function BookingPage() {
       setAvailability(avail);
       setBookings(book);
     } catch (err) {
-      setError('Unable to load data. Please check your Supabase configuration.');
+      setError('Unable to load data. Please check your connection.');
       console.error(err);
     } finally {
       setLoading(false);
@@ -48,7 +45,21 @@ export default function BookingPage() {
   const daySlots = availability.filter(a => a.date === selectedDate);
   const dayBookings = bookings.filter(b => b.date === selectedDate);
 
-  function isSlotBooked(slot) {
+  // Find the minimum rate for selected date (for validation)
+  const minRate = daySlots.length > 0
+    ? Math.min(...daySlots.map(s => parseFloat(s.min_rate)))
+    : 0;
+
+  // Count active bids per slot
+  function getBidCount(slot) {
+    return dayBookings.filter(
+      b => b.status === 'pending' &&
+        timeToMinutes(b.start_time) < timeToMinutes(slot.end_time) &&
+        timeToMinutes(b.end_time) > timeToMinutes(slot.start_time)
+    ).length;
+  }
+
+  function isSlotConfirmed(slot) {
     return dayBookings.some(
       b => b.status === 'confirmed' &&
         timeToMinutes(b.start_time) < timeToMinutes(slot.end_time) &&
@@ -56,8 +67,36 @@ export default function BookingPage() {
     );
   }
 
+  // Find the highest current bid for a slot
+  function getHighestBid(slot) {
+    const bids = dayBookings.filter(
+      b => (b.status === 'pending' || b.status === 'confirmed') &&
+        timeToMinutes(b.start_time) < timeToMinutes(slot.end_time) &&
+        timeToMinutes(b.end_time) > timeToMinutes(slot.start_time) &&
+        b.bid_amount
+    );
+    if (bids.length === 0) return null;
+    return Math.max(...bids.map(b => parseFloat(b.bid_amount)));
+  }
+
+  function validateBid() {
+    const amount = parseFloat(form.bidAmount);
+    if (!form.bidAmount || isNaN(amount)) {
+      setBidError('Please enter a bid amount.');
+      return false;
+    }
+    if (amount < minRate) {
+      setBidError(`Minimum bid is £${minRate}/hr.`);
+      return false;
+    }
+    setBidError('');
+    return true;
+  }
+
   async function handleSubmit() {
     if (!selectedDate || !form.name || !form.startTime || !form.endTime) return;
+    if (!validateBid()) return;
+
     setSubmitting(true);
     setError(null);
     try {
@@ -70,13 +109,14 @@ export default function BookingPage() {
         customer_phone: form.phone || null,
         num_children: parseInt(form.children),
         notes: form.notes || null,
+        bid_amount: parseFloat(form.bidAmount),
       });
       setForm(EMPTY_FORM);
       setSuccess(true);
       setTimeout(() => setSuccess(false), 5000);
       await loadData();
     } catch (err) {
-      setError('Failed to submit booking. Please try again.');
+      setError('Failed to submit bid. Please try again.');
       console.error(err);
     } finally {
       setSubmitting(false);
@@ -85,9 +125,10 @@ export default function BookingPage() {
 
   function update(field, value) {
     setForm(prev => ({ ...prev, [field]: value }));
+    if (field === 'bidAmount') setBidError('');
   }
 
-  // Parse selected date for display
+  // Display date
   let displayDate = '';
   if (selectedDate) {
     const [y, m, d] = selectedDate.split('-').map(Number);
@@ -129,23 +170,36 @@ export default function BookingPage() {
               {daySlots.length > 0 ? (
                 <div>
                   <p style={{ fontSize: 13, color: 'var(--clr-text-muted)', marginBottom: 16 }}>
-                    Available time slots:
+                    Available slots — place your bid to book:
                   </p>
 
                   <div style={{ marginBottom: 20 }}>
                     {daySlots.map(slot => {
-                      const booked = isSlotBooked(slot);
+                      const confirmed = isSlotConfirmed(slot);
+                      const bidCount = getBidCount(slot);
+                      const highBid = getHighestBid(slot);
+
                       return (
-                        <div key={slot.id} className={`slot ${booked ? 'slot-booked' : 'slot-open'}`}>
+                        <div key={slot.id} className={`slot ${confirmed ? 'slot-booked' : 'slot-open'}`}>
                           <div>
                             <div className="slot-time">
                               {formatTime(slot.start_time)} – {formatTime(slot.end_time)}
                             </div>
-                            <div className="slot-rate">£{slot.hourly_rate}/hour</div>
+                            <div className="slot-rate-from">
+                              From <strong>£{slot.min_rate}</strong>/hr
+                            </div>
+                            {bidCount > 0 && !confirmed && (
+                              <div className="slot-bid-info">
+                                🔥 {bidCount} bid{bidCount > 1 ? 's' : ''} placed
+                                {highBid && <> · highest £{highBid}/hr</>}
+                              </div>
+                            )}
                           </div>
-                          <span className={`slot-badge ${booked ? 'booked' : 'open'}`}>
-                            {booked ? 'Booked' : 'Open'}
-                          </span>
+                          <div style={{ textAlign: 'right' }}>
+                            <span className={`slot-badge ${confirmed ? 'booked' : 'open'}`}>
+                              {confirmed ? 'Booked' : 'Open'}
+                            </span>
+                          </div>
                         </div>
                       );
                     })}
@@ -154,13 +208,13 @@ export default function BookingPage() {
                   {success && (
                     <div className="success-banner">
                       <div className="emoji">🎉</div>
-                      <div className="title">Booking Request Sent!</div>
-                      <div className="desc">You'll receive a confirmation soon.</div>
+                      <div className="title">Bid Submitted!</div>
+                      <div className="desc">You'll be notified if your bid is accepted.</div>
                     </div>
                   )}
 
                   <h4 style={{ fontSize: 14, fontWeight: 700, marginBottom: 12 }}>
-                    Request a Booking
+                    Place Your Bid
                   </h4>
 
                   <div className="form-group">
@@ -182,7 +236,7 @@ export default function BookingPage() {
                     </div>
                   </div>
 
-                  <div className="form-row form-row-3" style={{ marginBottom: 12 }}>
+                  <div className="form-row form-row-2" style={{ marginBottom: 12 }}>
                     <div>
                       <label className="form-label">Start Time *</label>
                       <select className="form-select" value={form.startTime}
@@ -198,6 +252,26 @@ export default function BookingPage() {
                         <option value="">Select</option>
                         {TIME_SLOTS.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
                       </select>
+                    </div>
+                  </div>
+
+                  <div className="form-row form-row-2" style={{ marginBottom: 12 }}>
+                    <div>
+                      <label className="form-label">Your Bid (£/hr) *</label>
+                      <div className="bid-input-wrapper">
+                        <span className="bid-currency">£</span>
+                        <input
+                          className={`form-input bid-input ${bidError ? 'input-error' : ''}`}
+                          type="number"
+                          step="0.50"
+                          min={minRate}
+                          value={form.bidAmount}
+                          onChange={e => update('bidAmount', e.target.value)}
+                          placeholder={`${minRate} min`}
+                        />
+                      </div>
+                      {bidError && <div className="field-error">{bidError}</div>}
+                      <div className="bid-hint">Minimum £{minRate}/hr · Higher bids are more likely to be accepted</div>
                     </div>
                     <div>
                       <label className="form-label">Children</label>
@@ -217,10 +291,10 @@ export default function BookingPage() {
 
                   <button
                     className="btn btn-primary btn-full"
-                    disabled={!form.name || !form.startTime || !form.endTime || submitting}
+                    disabled={!form.name || !form.startTime || !form.endTime || !form.bidAmount || submitting}
                     onClick={handleSubmit}
                   >
-                    {submitting ? 'Submitting...' : 'Request Booking'}
+                    {submitting ? 'Submitting...' : `Submit Bid — £${form.bidAmount || '0'}/hr`}
                   </button>
                 </div>
               ) : (
