@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 // ⬇️ SET YOUR WHATSAPP NUMBER HERE (country code + number, no spaces)
 // Example for UK: '447700900000' (44 = UK, drop the leading 0)
 // Leave empty '' to hide the WhatsApp button
-const WHATSAPP_NUMBER = '';
+const WHATSAPP_NUMBER = '447427852530';
 
 const DEFAULT_MESSAGE = 'Hi! I have a question about your babysitting service 🌟';
 
