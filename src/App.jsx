@@ -1,12 +1,26 @@
 import { useState, useEffect } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate, useLocation, Link } from 'react-router-dom';
 import Header from './components/Header';
 import Home from './components/Home';
 import BookingPage from './components/BookingPage';
 import AdminDashboard from './components/AdminDashboard';
 import LoginModal from './components/LoginModal';
+import PrivacyPolicy from './components/PrivacyPolicy';
+import CookieConsent, { CookiePreferenceLink } from './components/CookieConsent';
 import { getCurrentUser, onAuthStateChange, signOut } from './lib/auth';
 import './styles/global.css';
+
+// Track page views on route change (only if GA is loaded)
+function usePageTracking() {
+  const location = useLocation();
+  useEffect(() => {
+    if (window.gtag) {
+      window.gtag('config', 'G-GSVNXL004D', {
+        page_path: location.pathname + location.hash,
+      });
+    }
+  }, [location]);
+}
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -14,7 +28,8 @@ export default function App() {
   const [showLogin, setShowLogin] = useState(false);
   const navigate = useNavigate();
 
-  // Check for existing session on mount + listen for changes
+  usePageTracking();
+
   useEffect(() => {
     getCurrentUser().then(u => {
       setUser(u);
@@ -61,6 +76,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/book" element={<BookingPage />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route
             path="/admin"
             element={
@@ -78,7 +94,13 @@ export default function App() {
 
       <footer className="footer">
         <p>Little Stars Babysitting © {new Date().getFullYear()} · Made with 💛</p>
+        <div className="footer-links">
+          <Link to="/privacy">Privacy Policy</Link>
+          <CookiePreferenceLink />
+        </div>
       </footer>
+
+      <CookieConsent />
 
       {showLogin && (
         <LoginModal
