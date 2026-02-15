@@ -93,8 +93,10 @@ export default function BookingPage() {
     return true;
   }
 
+  const hasContact = form.email.trim() || form.phone.trim();
+
   async function handleSubmit() {
-    if (!selectedDate || !form.name || !form.startTime || !form.endTime) return;
+    if (!selectedDate || !form.name || !form.startTime || !form.endTime || !hasContact) return;
     if (!validateBid()) return;
 
     setSubmitting(true);
@@ -225,16 +227,21 @@ export default function BookingPage() {
 
                   <div className="form-row form-row-2" style={{ marginBottom: 12 }}>
                     <div>
-                      <label className="form-label">Email</label>
+                      <label className="form-label">Email {!form.phone.trim() ? '*' : ''}</label>
                       <input className="form-input" value={form.email}
                         onChange={e => update('email', e.target.value)} placeholder="jane@email.com" />
                     </div>
                     <div>
-                      <label className="form-label">Phone</label>
+                      <label className="form-label">Phone {!form.email.trim() ? '*' : ''}</label>
                       <input className="form-input" value={form.phone}
                         onChange={e => update('phone', e.target.value)} placeholder="07700 900000" />
                     </div>
                   </div>
+                  {!hasContact && (
+                    <div className="field-error" style={{ marginTop: -8, marginBottom: 8 }}>
+                      Please provide at least an email or phone number
+                    </div>
+                  )}
 
                   <div className="form-row form-row-2" style={{ marginBottom: 12 }}>
                     <div>
@@ -291,7 +298,7 @@ export default function BookingPage() {
 
                   <button
                     className="btn btn-primary btn-full"
-                    disabled={!form.name || !form.startTime || !form.endTime || !form.bidAmount || submitting}
+                    disabled={!form.name || !form.startTime || !form.endTime || !form.bidAmount || !hasContact || submitting}
                     onClick={handleSubmit}
                   >
                     {submitting ? 'Submitting...' : `Submit Bid — £${form.bidAmount || '0'}/hr`}
