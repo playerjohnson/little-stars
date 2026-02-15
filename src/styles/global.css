@@ -15,6 +15,16 @@
   --clr-success: #4caf84;
   --clr-warning: #f0a030;
   --clr-danger: #e85d5d;
+  --clr-bg-alt: #f5ede8;
+  --clr-success-bg: #f0faf4;
+  --clr-danger-bg: #fef2f2;
+  --clr-danger-border: #fee2e2;
+  --clr-warning-bg: #fef8f0;
+  --clr-info-bg: #fff8f0;
+  --clr-info-border: #ffe0c2;
+  --clr-hover-light: #fff5f0;
+  --clr-selected-bg: #fff3eb;
+  --clr-error-bg: #fef0f0;
   --radius-sm: 10px;
   --radius-md: 14px;
   --radius-lg: 20px;
@@ -23,12 +33,42 @@
   --font-body: 'DM Sans', system-ui, sans-serif;
 }
 
+@media (prefers-color-scheme: dark) {
+  :root {
+    --clr-bg: #1a1412;
+    --clr-bg-warm: #1e1815;
+    --clr-surface: #2a2320;
+    --clr-surface-muted: #231d1a;
+    --clr-text: #ede4de;
+    --clr-text-muted: #a89890;
+    --clr-text-faint: #7a6c64;
+    --clr-border: rgba(200, 180, 160, 0.12);
+    --clr-border-input: #3e342e;
+    --clr-primary: #f08a74;
+    --clr-primary-dark: #e87070;
+    --clr-success: #5cc994;
+    --clr-warning: #f0aa40;
+    --clr-danger: #f07070;
+    --clr-bg-alt: #2a2320;
+    --clr-success-bg: #1a2e22;
+    --clr-danger-bg: #2e1a1a;
+    --clr-danger-border: #3e2222;
+    --clr-warning-bg: #2e2618;
+    --clr-info-bg: #2e2418;
+    --clr-info-border: #3e3020;
+    --clr-hover-light: #332a24;
+    --clr-selected-bg: #3a2e26;
+    --clr-error-bg: #2e1a1a;
+    --shadow-card: 0 2px 20px rgba(0, 0, 0, 0.25);
+  }
+}
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
   font-family: var(--font-body);
   color: var(--clr-text);
-  background: linear-gradient(160deg, var(--clr-bg) 0%, var(--clr-bg-warm) 40%, #f5ede8 100%);
+  background: linear-gradient(160deg, var(--clr-bg) 0%, var(--clr-bg-warm) 40%, var(--clr-bg-alt) 100%);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
 }
@@ -149,7 +189,7 @@ body {
 .nav-pills {
   display: flex;
   gap: 4px;
-  background: #f5ede8;
+  background: var(--clr-bg-alt);
   border-radius: var(--radius-md);
   padding: 4px;
 }
@@ -307,9 +347,9 @@ body {
   margin: 0 auto;
 }
 
-.calendar-day:hover:not(:disabled) { background: #fff5f0; }
+.calendar-day:hover:not(:disabled) { background: var(--clr-hover-light); }
 .calendar-day:disabled { color: #ccc; cursor: default; }
-.calendar-day.today { background: #fff5f0; font-weight: 700; }
+.calendar-day.today { background: var(--clr-hover-light); font-weight: 700; }
 
 .calendar-day.selected,
 .calendar-day.selected.today {
@@ -388,7 +428,7 @@ body {
 }
 
 .slot-open {
-  background: #f0faf4;
+  background: var(--clr-success-bg);
   border: 1.5px solid #c5e8d0;
 }
 
@@ -520,7 +560,7 @@ body {
 .bid-filters {
   display: flex;
   gap: 4px;
-  background: #f5ede8;
+  background: var(--clr-bg-alt);
   border-radius: 12px;
   padding: 4px;
   margin-bottom: 16px;
@@ -844,7 +884,7 @@ body {
 /* ─── Success Banner ──────────────────── */
 
 .success-banner {
-  background: #f0faf4;
+  background: var(--clr-success-bg);
   border: 1.5px solid var(--clr-success);
   border-radius: var(--radius-md);
   padding: 16px;
@@ -1023,7 +1063,7 @@ body {
 /* ─── Error Banner ────────────────────── */
 
 .error-banner {
-  background: #fef0f0;
+  background: var(--clr-error-bg);
   border: 1.5px solid var(--clr-danger);
   border-radius: var(--radius-md);
   padding: 12px 16px;
@@ -1041,7 +1081,7 @@ body {
   align-items: center;
   padding: 10px 14px;
   border-radius: var(--radius-sm);
-  background: #f5ede8;
+  background: var(--clr-bg-alt);
   margin-bottom: 6px;
 }
 
@@ -1059,7 +1099,7 @@ body {
 .view-toggle {
   display: flex;
   gap: 4px;
-  background: #f5ede8;
+  background: var(--clr-bg-alt);
   border-radius: 12px;
   padding: 4px;
   margin-bottom: 20px;
@@ -1100,7 +1140,7 @@ body {
 }
 
 .list-slot:hover { border-color: var(--clr-primary); background: #fff9f5; }
-.list-slot-selected { border-color: var(--clr-primary); background: #fff3eb; }
+.list-slot-selected { border-color: var(--clr-primary); background: var(--clr-selected-bg); }
 
 .list-slot-date {
   text-align: center;
@@ -1120,7 +1160,7 @@ body {
 
 .repeat-booking-note {
   font-size: 13px;
-  background: #f0f9f4;
+  background: var(--clr-success-bg);
   color: var(--clr-success);
   border: 1px solid #c6e6d3;
   border-radius: var(--radius-sm);
@@ -1325,7 +1365,7 @@ body {
   align-items: center;
   gap: 12px;
   padding: 10px 14px;
-  background: #f5ede8;
+  background: var(--clr-bg-alt);
   border-radius: var(--radius-sm);
 }
 
@@ -1344,9 +1384,9 @@ body {
   border-left: 4px solid;
 }
 
-.policy-tier-green { background: #f0f9f4; border-color: var(--clr-success); }
-.policy-tier-amber { background: #fef8f0; border-color: var(--clr-warning); }
-.policy-tier-red { background: #fef0f0; border-color: var(--clr-danger); }
+.policy-tier-green { background: var(--clr-success-bg); border-color: var(--clr-success); }
+.policy-tier-amber { background: var(--clr-warning-bg); border-color: var(--clr-warning); }
+.policy-tier-red { background: var(--clr-error-bg); border-color: var(--clr-danger); }
 
 .policy-tier-header {
   display: flex;
@@ -1375,7 +1415,7 @@ body {
 .admin-tabs {
   display: flex;
   gap: 4px;
-  background: #f5ede8;
+  background: var(--clr-bg-alt);
   border-radius: 12px;
   padding: 4px;
   margin-bottom: 24px;
@@ -1563,8 +1603,8 @@ body {
 .admin-cancel-info {
   margin-top: 10px;
   padding: 10px 12px;
-  background: #fef2f2;
-  border: 1px solid #fee2e2;
+  background: var(--clr-danger-bg);
+  border: 1px solid var(--clr-danger-border);
   border-radius: var(--radius-sm);
   font-size: 12px;
 }
@@ -1622,22 +1662,22 @@ body {
   margin-bottom: 16px;
   text-align: left;
   font-weight: 500;
-  background: #fff8f0;
-  border: 1.5px solid #ffe0c2;
+  background: var(--clr-info-bg);
+  border: 1.5px solid var(--clr-info-border);
   border-radius: var(--radius-sm);
   padding: 12px 16px;
 }
 
 .cancel-fee-box {
-  background: #fef2f2;
-  border: 1px solid #fee2e2;
+  background: var(--clr-danger-bg);
+  border: 1px solid var(--clr-danger-border);
   border-radius: var(--radius-sm);
   padding: 12px 16px;
   margin-bottom: 20px;
 }
 
 .cancel-fee-free {
-  background: #f0faf4;
+  background: var(--clr-success-bg);
   border-color: #d1fae5;
 }
 
@@ -1840,5 +1880,237 @@ body {
 
 @media (max-width: 600px) {
   .guides-grid { grid-template-columns: 1fr; }
+}
+
+/* ─── Dark Mode Overrides ─────────────── */
+
+@media (prefers-color-scheme: dark) {
+  /* Header */
+  .header {
+    background: rgba(30, 24, 21, 0.85);
+    border-bottom-color: var(--clr-border);
+  }
+
+  /* Nav */
+  .nav a:hover,
+  .nav a.active {
+    background: rgba(240, 138, 116, 0.12);
+  }
+
+  .nav-login {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+
+  /* Form inputs */
+  .form-input,
+  .form-select,
+  .form-textarea {
+    background: var(--clr-surface-muted);
+    border-color: var(--clr-border-input);
+    color: var(--clr-text);
+  }
+
+  .form-select option {
+    background: var(--clr-surface);
+    color: var(--clr-text);
+  }
+
+  .form-select option:disabled {
+    color: #5a4e48;
+  }
+
+  /* Calendar */
+  .calendar-day:disabled { color: #5a4e48; }
+  .calendar-day.selected .calendar-dot.avail { background: #fff; }
+
+  /* Modal */
+  .modal-overlay {
+    background: rgba(0, 0, 0, 0.7);
+  }
+
+  .modal,
+  .auth-modal,
+  .cancel-modal {
+    background: var(--clr-surface);
+    color: var(--clr-text);
+  }
+
+  .modal-close {
+    color: var(--clr-text-muted);
+  }
+
+  /* Cookie consent */
+  .cookie-banner {
+    background: var(--clr-surface);
+    box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Footer */
+  .footer {
+    background: rgba(30, 24, 21, 0.5);
+  }
+
+  .footer-links a {
+    color: var(--clr-text-muted);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, #2a1e1a, #1e1815);
+  }
+
+  /* Buttons - outline variants in dark */
+  .btn-outline {
+    border-color: var(--clr-border-input);
+    color: var(--clr-text);
+  }
+
+  .btn-outline:hover {
+    background: var(--clr-surface-muted);
+  }
+
+  /* Status cards */
+  .status-card {
+    border-color: var(--clr-border);
+  }
+
+  /* Review cards */
+  .star-empty { color: #5a4e48; }
+
+  /* Booking cards */
+  .booking-card {
+    border-color: var(--clr-border);
+  }
+
+  .booking-card-highlight {
+    border-color: var(--clr-success) !important;
+    background: var(--clr-success-bg);
+  }
+
+  /* CTA section */
+  .cta-section {
+    background: var(--clr-surface);
+  }
+
+  /* Policy tiers */
+  .policy-tier-green { background: var(--clr-success-bg); }
+  .policy-tier-amber { background: var(--clr-warning-bg); }
+  .policy-tier-red { background: var(--clr-danger-bg); }
+
+  /* Cancel modal */
+  .cancel-actions .btn-outline {
+    border-color: var(--clr-text-muted);
+    color: var(--clr-text);
+  }
+
+  .cancel-actions .btn-outline:hover {
+    background: var(--clr-text-muted);
+    color: var(--clr-surface);
+  }
+
+  .cancel-fee-free {
+    background: var(--clr-success-bg);
+    border-color: rgba(92, 201, 148, 0.2);
+  }
+
+  /* Bid input */
+  .bid-currency {
+    color: var(--clr-text-muted);
+  }
+
+  /* Referral cards */
+  .referral-code-display {
+    color: var(--clr-primary);
+  }
+
+  /* WhatsApp FAB */
+  .whatsapp-fab {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Notification dropdown */
+  .notif-dropdown {
+    background: var(--clr-surface);
+    border-color: var(--clr-border);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  }
+
+  /* View toggle */
+  .view-toggle-btn {
+    color: var(--clr-text-muted);
+  }
+
+  .view-toggle-btn.active {
+    background: var(--clr-surface);
+    color: var(--clr-text);
+  }
+
+  /* Slot cards */
+  .slot-open {
+    border-color: var(--clr-border);
+    background: var(--clr-surface-muted);
+  }
+
+  .slot-booked {
+    background: var(--clr-surface-muted);
+    border-color: var(--clr-border);
+  }
+
+  /* Guide cards */
+  .guide-card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  }
+
+  /* List view slots */
+  .list-slot {
+    border-color: var(--clr-border);
+  }
+
+  .list-slot:hover {
+    background: var(--clr-hover-light);
+  }
+
+  /* Admin tabs */
+  .admin-tab {
+    color: var(--clr-text-muted);
+  }
+
+  .admin-tab.active {
+    color: var(--clr-primary);
+    border-color: var(--clr-primary);
+  }
+
+  /* Repeat booking note */
+  .repeat-booking-note {
+    background: var(--clr-info-bg);
+    border-color: var(--clr-info-border);
+  }
+
+  /* Privacy content */
+  .privacy-content {
+    color: var(--clr-text-muted);
+  }
+
+  /* About page badges */
+  .about-badge {
+    background: var(--clr-surface-muted);
+  }
+
+  /* Feature cards on home */
+  .feature-card {
+    background: var(--clr-surface);
+  }
+
+  /* Step number stays the same (gradient) */
+
+  /* Scrollbar */
+  ::-webkit-scrollbar-thumb {
+    background: var(--clr-text-faint);
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--clr-surface-muted);
+  }
 }
 
