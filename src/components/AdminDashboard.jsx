@@ -243,7 +243,7 @@ export default function AdminDashboard({ user, onLogout }) {
           <div className="card">
             <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 18, marginBottom: 16 }}>Bids & Bookings</h3>
             <div className="bid-filters">
-              {['all', 'pending', 'confirmed', 'declined'].map(f => (
+              {['all', 'pending', 'confirmed', 'declined', 'cancelled'].map(f => (
                 <button key={f} className={`bid-filter-btn ${filter === f ? 'active' : ''}`} onClick={() => setFilter(f)}>
                   {f.charAt(0).toUpperCase() + f.slice(1)}
                   {f === 'pending' && pendingCount > 0 && <span className="filter-badge">{pendingCount}</span>}

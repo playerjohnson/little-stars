@@ -1749,6 +1749,14 @@ body {
   border-radius: var(--radius-sm);
 }
 
+.cancel-info-admin {
+  background: var(--clr-danger-bg);
+  border: 1px solid var(--clr-danger-border);
+  padding: 10px 14px;
+  font-size: 13px;
+  color: var(--clr-text-muted);
+}
+
 /* ─── Guides Page ─────────────────────── */
 
 .guides-grid {

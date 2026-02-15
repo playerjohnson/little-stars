@@ -132,7 +132,7 @@ export default function BookingStatus() {
       case 'pending': return { label: 'Pending', emoji: '⏳', color: 'var(--clr-warning)', desc: 'Your bid is being reviewed.' };
       case 'confirmed': return { label: 'Confirmed', emoji: '✅', color: 'var(--clr-success)', desc: 'Your booking is confirmed!' };
       case 'declined': return { label: 'Declined', emoji: '❌', color: 'var(--clr-danger)', desc: 'Another bid was accepted.' };
-      case 'cancelled': return { label: 'Cancelled', emoji: '🚫', color: 'var(--clr-text-faint)', desc: 'This booking was cancelled.' };
+      case 'cancelled': return { label: 'Cancelled', emoji: '🚫', color: 'var(--clr-text-faint)', desc: '' };
       default: return { label: status, emoji: '❓', color: 'var(--clr-text-muted)', desc: '' };
     }
   }
@@ -233,22 +233,30 @@ export default function BookingStatus() {
                     </div>
 
                     {/* Cancellation info for already-cancelled bookings */}
-                    {b.status === 'cancelled' && b.cancellation_tier && (
-                      <div className="cancel-info-badge">
+                    {b.status === 'cancelled' && (
+                      <div className={`cancel-info-badge ${b.cancellation_tier === 'admin' ? 'cancel-info-admin' : ''}`}>
                         {b.cancellation_tier === 'admin' ? (
                           <>
-                            <div style={{ fontWeight: 600, color: 'var(--clr-danger)', marginBottom: 2 }}>
-                              Cancelled by babysitter
+                            <div style={{ fontWeight: 600, color: 'var(--clr-danger)', marginBottom: 4 }}>
+                              ⚠️ Cancelled by babysitter
                             </div>
                             {b.admin_cancel_reason && (
-                              <div>Reason: "{b.admin_cancel_reason}"</div>
+                              <div style={{ fontStyle: 'italic', marginBottom: 4 }}>
+                                "{b.admin_cancel_reason}"
+                              </div>
                             )}
-                            <div style={{ marginTop: 2 }}>No charge applies</div>
+                            <div style={{ fontSize: 11, color: 'var(--clr-text-faint)' }}>
+                              No charge applies · Please rebook for another date
+                            </div>
                           </>
-                        ) : b.cancellation_fee > 0 ? (
-                          <span>Cancellation fee: <strong>£{parseFloat(b.cancellation_fee).toFixed(2)}</strong> ({b.cancellation_tier})</span>
+                        ) : b.cancellation_tier ? (
+                          b.cancellation_fee > 0 ? (
+                            <span>Cancellation fee: <strong>£{parseFloat(b.cancellation_fee).toFixed(2)}</strong> ({b.cancellation_tier})</span>
+                          ) : (
+                            <span>Cancelled by you — no charge</span>
+                          )
                         ) : (
-                          <span>Cancelled — no charge</span>
+                          <span>This booking was cancelled.</span>
                         )}
                       </div>
                     )}
