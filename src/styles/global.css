@@ -305,7 +305,15 @@ body {
 .calendar-day:hover:not(:disabled) { background: #fff5f0; }
 .calendar-day:disabled { color: #ccc; cursor: default; }
 .calendar-day.today { background: #fff5f0; font-weight: 700; }
-.calendar-day.selected { background: var(--clr-primary); color: #fff; font-weight: 700; }
+
+.calendar-day.selected,
+.calendar-day.selected.today {
+  background: linear-gradient(135deg, var(--clr-primary), var(--clr-primary-dark)) !important;
+  color: #fff !important;
+  font-weight: 700;
+  box-shadow: 0 3px 12px rgba(232, 115, 90, 0.4);
+  transform: scale(1.08);
+}
 
 .calendar-dot {
   position: absolute;
