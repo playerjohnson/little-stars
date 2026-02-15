@@ -1650,6 +1650,18 @@ body {
   gap: 8px;
 }
 
+.cancel-actions .btn-danger-outline {
+  background: var(--clr-danger);
+  color: #fff;
+  border-color: var(--clr-danger);
+  font-weight: 700;
+}
+
+.cancel-actions .btn-danger-outline:hover {
+  background: #d32f2f;
+  border-color: #d32f2f;
+}
+
 .cancel-info-badge {
   margin-top: 8px;
   font-size: 12px;
