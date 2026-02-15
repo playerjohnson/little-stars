@@ -1662,6 +1662,17 @@ body {
   border-color: #d32f2f;
 }
 
+.cancel-actions .btn-outline {
+  border: 2px solid var(--clr-text);
+  color: var(--clr-text);
+  font-weight: 700;
+}
+
+.cancel-actions .btn-outline:hover {
+  background: var(--clr-text);
+  color: #fff;
+}
+
 .cancel-info-badge {
   margin-top: 8px;
   font-size: 12px;
