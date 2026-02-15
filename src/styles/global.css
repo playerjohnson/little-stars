@@ -1757,6 +1757,44 @@ body {
   color: var(--clr-text-muted);
 }
 
+/* ─── Terms Checkbox ──────────────────── */
+
+.terms-checkbox {
+  margin: 16px 0;
+  padding: 12px 14px;
+  background: var(--clr-surface-muted);
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--clr-border);
+}
+
+.terms-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--clr-text);
+}
+
+.terms-input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--clr-primary);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.terms-link {
+  color: var(--clr-primary);
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+.terms-link:hover {
+  color: var(--clr-primary-dark);
+}
+
 /* ─── Guides Page ─────────────────────── */
 
 .guides-grid {

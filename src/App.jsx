@@ -11,6 +11,7 @@ import PrivacyPolicy from './components/PrivacyPolicy';
 import CancellationPolicy from './components/CancellationPolicy';
 import CookieConsent, { CookiePreferenceLink } from './components/CookieConsent';
 import Guides from './components/Guides';
+import TermsConditions from './components/TermsConditions';
 import WhatsAppButton from './components/WhatsAppButton';
 import { getCurrentUser, onAuthStateChange, signOut } from './lib/auth';
 import './styles/global.css';
@@ -59,6 +60,7 @@ export default function App() {
           <Route path="/about" element={<AboutMe />} />
           <Route path="/status" element={<BookingStatus />} />
           <Route path="/guides" element={<Guides />} />
+          <Route path="/terms" element={<TermsConditions />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/cancellation" element={<CancellationPolicy />} />
           <Route path="/admin" element={
@@ -74,6 +76,7 @@ export default function App() {
         <div className="footer-links">
           <Link to="/about">About</Link>
           <Link to="/guides">Help & Guides</Link>
+          <Link to="/terms">Terms & Conditions</Link>
           <Link to="/cancellation">Cancellation Policy</Link>
           <Link to="/privacy">Privacy Policy</Link>
           <CookiePreferenceLink />

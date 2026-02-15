@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import Calendar from './Calendar';
 import {
   DAYS_FULL, MONTHS, TIME_SLOTS, formatTime, timeToMinutes,
@@ -36,6 +37,7 @@ export default function BookingPage() {
   const [bidError, setBidError] = useState('');
   const [referralValid, setReferralValid] = useState(null);
   const [referralDiscount, setReferralDiscount] = useState(0);
+  const [termsAccepted, setTermsAccepted] = useState(false);
 
   useEffect(() => { loadData(); }, []);
 
@@ -194,7 +196,7 @@ export default function BookingPage() {
   }
 
   async function handleSubmit() {
-    if (!selectedDate || !form.name || !form.startTime || !form.endTime || !hasContact) return;
+    if (!selectedDate || !form.name || !form.startTime || !form.endTime || !hasContact || !termsAccepted) return;
     if (allSlotsConfirmed) return;
     if (!validateBid()) return;
 
@@ -216,6 +218,7 @@ export default function BookingPage() {
         notes: form.notes || null,
         bid_amount: parseFloat(form.bidAmount),
         referral_code: form.referralCode.trim().toUpperCase() || null,
+        terms_accepted_at: new Date().toISOString(),
       });
 
       if (referralValid && form.referralCode.trim()) {
@@ -225,6 +228,7 @@ export default function BookingPage() {
       setForm(prev => ({ ...prev, startTime: '', endTime: '', bidAmount: '', notes: '', referralCode: '' }));
       setReferralValid(null);
       setReferralDiscount(0);
+      setTermsAccepted(false);
       setSuccess(true);
       setTimeout(() => setSuccess(false), 5000);
       await loadData();
@@ -561,9 +565,27 @@ export default function BookingPage() {
                           placeholder="Any special requirements..." />
                       </div>
 
+                      {/* Terms & Conditions */}
+                      <div className="terms-checkbox">
+                        <label className="terms-label">
+                          <input
+                            type="checkbox"
+                            checked={termsAccepted}
+                            onChange={e => setTermsAccepted(e.target.checked)}
+                            className="terms-input"
+                          />
+                          <span>
+                            I agree to the{' '}
+                            <Link to="/terms" target="_blank" className="terms-link">
+                              Terms &amp; Conditions
+                            </Link>
+                          </span>
+                        </label>
+                      </div>
+
                       <button
                         className="btn btn-primary btn-full"
-                        disabled={!form.name || !form.startTime || !form.endTime || !form.bidAmount || !hasContact || submitting}
+                        disabled={!form.name || !form.startTime || !form.endTime || !form.bidAmount || !hasContact || !termsAccepted || submitting}
                         onClick={handleSubmit}
                       >
                         {submitting ? 'Submitting...' : `Submit Bid — £${form.bidAmount || '0'}/hr`}

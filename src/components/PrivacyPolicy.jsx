@@ -7,7 +7,7 @@ export default function PrivacyPolicy() {
         Privacy Policy
       </h1>
       <p style={{ color: 'var(--clr-text-faint)', fontSize: 13, marginBottom: 24 }}>
-        Last updated: {new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+        Last updated: 15 February 2026
       </p>
 
       <div className="privacy-content">
