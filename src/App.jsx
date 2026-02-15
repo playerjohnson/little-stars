@@ -12,6 +12,8 @@ import CancellationPolicy from './components/CancellationPolicy';
 import CookieConsent, { CookiePreferenceLink } from './components/CookieConsent';
 import Guides from './components/Guides';
 import TermsConditions from './components/TermsConditions';
+import SafeguardingPolicy from './components/SafeguardingPolicy';
+import AccessibilityStatement from './components/AccessibilityStatement';
 import WhatsAppButton from './components/WhatsAppButton';
 import { getCurrentUser, onAuthStateChange, signOut } from './lib/auth';
 import './styles/global.css';
@@ -61,6 +63,8 @@ export default function App() {
           <Route path="/status" element={<BookingStatus />} />
           <Route path="/guides" element={<Guides />} />
           <Route path="/terms" element={<TermsConditions />} />
+          <Route path="/safeguarding" element={<SafeguardingPolicy />} />
+          <Route path="/accessibility" element={<AccessibilityStatement />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/cancellation" element={<CancellationPolicy />} />
           <Route path="/admin" element={
@@ -78,7 +82,9 @@ export default function App() {
           <Link to="/guides">Help & Guides</Link>
           <Link to="/terms">Terms & Conditions</Link>
           <Link to="/cancellation">Cancellation Policy</Link>
+          <Link to="/safeguarding">Safeguarding</Link>
           <Link to="/privacy">Privacy Policy</Link>
+          <Link to="/accessibility">Accessibility</Link>
           <CookiePreferenceLink />
         </div>
       </footer>

@@ -55,6 +55,13 @@ export default function PrivacyPolicy() {
         <p>
           You can change your cookie preferences at any time: <CookiePreferenceLink />
         </p>
+        <p>
+          For more information on how Google processes analytics data, see{' '}
+          <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer"
+            style={{ color: 'var(--clr-primary)' }}>
+            Google's Privacy Policy
+          </a>.
+        </p>
 
         <h3>Third parties</h3>
         <p>
