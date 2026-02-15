@@ -1,27 +1,53 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import Header from './components/Header';
 import Home from './components/Home';
 import BookingPage from './components/BookingPage';
 import AdminDashboard from './components/AdminDashboard';
 import LoginModal from './components/LoginModal';
+import { getCurrentUser, onAuthStateChange, signOut } from './lib/auth';
 import './styles/global.css';
 
 export default function App() {
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [user, setUser] = useState(null);
+  const [authLoading, setAuthLoading] = useState(true);
   const [showLogin, setShowLogin] = useState(false);
   const navigate = useNavigate();
 
-  function handleLoginSuccess() {
-    setIsAdmin(true);
+  // Check for existing session on mount + listen for changes
+  useEffect(() => {
+    getCurrentUser().then(u => {
+      setUser(u);
+      setAuthLoading(false);
+    });
+
+    const unsubscribe = onAuthStateChange((u, event) => {
+      setUser(u);
+      if (event === 'SIGNED_OUT') {
+        navigate('/');
+      }
+    });
+
+    return unsubscribe;
+  }, []);
+
+  function handleLoginSuccess(u) {
+    setUser(u);
     setShowLogin(false);
     navigate('/admin');
   }
 
-  function handleLogout() {
-    setIsAdmin(false);
-    navigate('/');
+  async function handleLogout() {
+    try {
+      await signOut();
+      setUser(null);
+      navigate('/');
+    } catch (err) {
+      console.error('Logout failed:', err);
+    }
   }
+
+  const isAdmin = !!user;
 
   return (
     <>
@@ -38,9 +64,13 @@ export default function App() {
           <Route
             path="/admin"
             element={
-              isAdmin
-                ? <AdminDashboard onLogout={handleLogout} />
-                : <Home />
+              authLoading ? (
+                <div className="loading">Checking login...</div>
+              ) : isAdmin ? (
+                <AdminDashboard user={user} onLogout={handleLogout} />
+              ) : (
+                <Home />
+              )
             }
           />
         </Routes>

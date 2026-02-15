@@ -614,6 +614,33 @@ body {
 
 .modal .form-input { text-align: center; font-size: 24px; letter-spacing: 8px; }
 
+.auth-modal { width: 400px; }
+.auth-modal .form-input { text-align: left; font-size: 15px; letter-spacing: normal; }
+
+.auth-link-btn {
+  background: none;
+  border: none;
+  color: var(--clr-primary);
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 0;
+  transition: opacity 0.2s;
+}
+
+.auth-link-btn:hover { opacity: 0.7; }
+
+.admin-user-bar {
+  font-size: 13px;
+  color: var(--clr-text-muted);
+  background: var(--clr-surface-muted);
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 16px;
+  border: 1px solid var(--clr-border);
+}
+
 .modal-buttons { display: flex; gap: 10px; justify-content: center; margin-top: 16px; }
 
 /* ─── Hero ────────────────────────────── */

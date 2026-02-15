@@ -55,5 +55,4 @@ export function getMonthRange(date) {
   return { start, end };
 }
 
-// Admin PIN — change this to whatever you like
-export const ADMIN_PIN = '1234';
+// Admin auth is now handled via Supabase Auth (email/password)

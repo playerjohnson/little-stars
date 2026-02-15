@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Calendar from './Calendar';
+import ChangePassword from './ChangePassword';
 import {
   MONTHS, TIME_SLOTS, formatTime, DAYS_FULL,
 } from '../lib/utils';
@@ -9,7 +10,7 @@ import {
   updateBookingStatus, acceptBid,
 } from '../lib/supabase';
 
-export default function AdminDashboard({ onLogout }) {
+export default function AdminDashboard({ user, onLogout }) {
   const [selectedDate, setSelectedDate] = useState(null);
   const [availability, setAvailability] = useState([]);
   const [bookings, setBookings] = useState([]);
@@ -19,7 +20,7 @@ export default function AdminDashboard({ onLogout }) {
 
   const [slotForm, setSlotForm] = useState({ startTime: '09:00:00', endTime: '17:00:00', rate: '12' });
   const [adding, setAdding] = useState(false);
-  const [filter, setFilter] = useState('all'); // all, pending, confirmed, declined
+  const [filter, setFilter] = useState('all');
 
   useEffect(() => { loadData(); }, []);
 
@@ -99,18 +100,14 @@ export default function AdminDashboard({ onLogout }) {
   const pendingCount = allBookings.filter(b => b.status === 'pending').length;
   const confirmedCount = allBookings.filter(b => b.status === 'confirmed').length;
   const availDayCount = new Set(availability.map(a => a.date)).size;
-
-  // Calculate total confirmed earnings
   const totalEarnings = allBookings
     .filter(b => b.status === 'confirmed' && b.bid_amount)
     .reduce((sum, b) => sum + parseFloat(b.bid_amount), 0);
 
-  // Filter bookings
   const filteredBookings = filter === 'all'
     ? allBookings
     : allBookings.filter(b => b.status === filter);
 
-  // Group bookings by date for display
   const groupedBookings = {};
   filteredBookings.forEach(b => {
     if (!groupedBookings[b.date]) groupedBookings[b.date] = [];
@@ -123,12 +120,9 @@ export default function AdminDashboard({ onLogout }) {
     displayDate = `${d} ${MONTHS[m - 1]}`;
   }
 
-  // Find highest bid for a booking's time slot (for badge highlighting)
   function isHighestBid(booking) {
     const peers = allBookings.filter(
-      b => b.date === booking.date &&
-        b.status === 'pending' &&
-        b.bid_amount
+      b => b.date === booking.date && b.status === 'pending' && b.bid_amount
     );
     if (peers.length <= 1) return false;
     const maxBid = Math.max(...peers.map(b => parseFloat(b.bid_amount)));
@@ -137,10 +131,21 @@ export default function AdminDashboard({ onLogout }) {
 
   return (
     <div>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
+      {/* Header bar */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
         <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 30 }}>Dashboard</h2>
-        <button className="btn btn-outline btn-sm" onClick={onLogout}>Logout</button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <ChangePassword />
+          <button className="btn btn-outline btn-sm" onClick={onLogout}>Logout</button>
+        </div>
       </div>
+
+      {/* Logged in as */}
+      {user && (
+        <div className="admin-user-bar">
+          Signed in as <strong>{user.email}</strong>
+        </div>
+      )}
 
       {error && <div className="error-banner">{error}</div>}
 
@@ -239,7 +244,6 @@ export default function AdminDashboard({ onLogout }) {
             </h3>
           </div>
 
-          {/* Filter Tabs */}
           <div className="bid-filters">
             {['all', 'pending', 'confirmed', 'declined'].map(f => (
               <button
@@ -271,7 +275,6 @@ export default function AdminDashboard({ onLogout }) {
                     <div className="date-group-header">
                       📅 {d} {MONTHS[m - 1]} {y}
                     </div>
-
                     {dateBids.map(booking => {
                       const highest = isHighestBid(booking);
                       return (
@@ -284,16 +287,13 @@ export default function AdminDashboard({ onLogout }) {
                                   <span className="highest-bid-tag">⭐ Highest</span>
                                 )}
                               </div>
-
                               <div className="bid-amount-display">
                                 £{booking.bid_amount || '—'}<span>/hr</span>
                               </div>
-
                               <div style={{ fontSize: 13, color: 'var(--clr-text-muted)', marginTop: 4 }}>
                                 {formatTime(booking.start_time)} – {formatTime(booking.end_time)}
                                 {' · '}{booking.num_children} child{booking.num_children > 1 ? 'ren' : ''}
                               </div>
-
                               {booking.customer_phone && (
                                 <div style={{ fontSize: 12, color: 'var(--clr-text-faint)', marginTop: 2 }}>📞 {booking.customer_phone}</div>
                               )}
@@ -308,7 +308,6 @@ export default function AdminDashboard({ onLogout }) {
                             </div>
                             <span className={`booking-status ${booking.status}`}>{booking.status}</span>
                           </div>
-
                           {booking.status === 'pending' && (
                             <div className="booking-actions">
                               <button className="btn btn-success btn-sm" style={{ flex: 1 }}
@@ -321,7 +320,6 @@ export default function AdminDashboard({ onLogout }) {
                               </button>
                             </div>
                           )}
-
                           {booking.status === 'pending' && (
                             <div className="accept-note">
                               Accepting will auto-decline other overlapping bids
