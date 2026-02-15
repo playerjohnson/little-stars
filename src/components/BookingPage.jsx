@@ -1,0 +1,245 @@
+import { useState, useEffect } from 'react';
+import Calendar from './Calendar';
+import {
+  DAYS_FULL, MONTHS, TIME_SLOTS, formatTime, formatDateDisplay, timeToMinutes, getMonthRange, dateToKey,
+} from '../lib/utils';
+import { getAvailability, getBookings, createBooking } from '../lib/supabase';
+
+const EMPTY_FORM = { name: '', email: '', phone: '', children: '1', startTime: '', endTime: '', notes: '' };
+
+export default function BookingPage() {
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [availability, setAvailability] = useState([]);
+  const [bookings, setBookings] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const [form, setForm] = useState(EMPTY_FORM);
+  const [submitting, setSubmitting] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  // Load data
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  async function loadData() {
+    setLoading(true);
+    setError(null);
+    try {
+      // Load a wide range — 3 months back and forward
+      const now = new Date();
+      const start = `${now.getFullYear()}-01-01`;
+      const end = `${now.getFullYear() + 1}-12-31`;
+      const [avail, book] = await Promise.all([
+        getAvailability(start, end),
+        getBookings(start, end),
+      ]);
+      setAvailability(avail);
+      setBookings(book);
+    } catch (err) {
+      setError('Unable to load data. Please check your Supabase configuration.');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const daySlots = availability.filter(a => a.date === selectedDate);
+  const dayBookings = bookings.filter(b => b.date === selectedDate);
+
+  function isSlotBooked(slot) {
+    return dayBookings.some(
+      b => b.status === 'confirmed' &&
+        timeToMinutes(b.start_time) < timeToMinutes(slot.end_time) &&
+        timeToMinutes(b.end_time) > timeToMinutes(slot.start_time)
+    );
+  }
+
+  async function handleSubmit() {
+    if (!selectedDate || !form.name || !form.startTime || !form.endTime) return;
+    setSubmitting(true);
+    setError(null);
+    try {
+      await createBooking({
+        date: selectedDate,
+        start_time: form.startTime,
+        end_time: form.endTime,
+        customer_name: form.name,
+        customer_email: form.email || null,
+        customer_phone: form.phone || null,
+        num_children: parseInt(form.children),
+        notes: form.notes || null,
+      });
+      setForm(EMPTY_FORM);
+      setSuccess(true);
+      setTimeout(() => setSuccess(false), 5000);
+      await loadData();
+    } catch (err) {
+      setError('Failed to submit booking. Please try again.');
+      console.error(err);
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  function update(field, value) {
+    setForm(prev => ({ ...prev, [field]: value }));
+  }
+
+  // Parse selected date for display
+  let displayDate = '';
+  if (selectedDate) {
+    const [y, m, d] = selectedDate.split('-').map(Number);
+    const dateObj = new Date(y, m - 1, d);
+    displayDate = `${DAYS_FULL[dateObj.getDay()]}, ${d} ${MONTHS[m - 1]}`;
+  }
+
+  return (
+    <div>
+      <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 30, marginBottom: 24 }}>
+        Book a Session
+      </h2>
+
+      {error && <div className="error-banner">{error}</div>}
+
+      <div className="grid-2">
+        {/* Calendar */}
+        <div className="card">
+          {loading ? (
+            <div className="loading">Loading calendar...</div>
+          ) : (
+            <Calendar
+              selectedDate={selectedDate}
+              onSelectDate={setSelectedDate}
+              availability={availability}
+              bookings={bookings}
+            />
+          )}
+        </div>
+
+        {/* Booking Panel */}
+        <div className="card">
+          {selectedDate ? (
+            <div>
+              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 18, marginBottom: 4 }}>
+                {displayDate}
+              </h3>
+
+              {daySlots.length > 0 ? (
+                <div>
+                  <p style={{ fontSize: 13, color: 'var(--clr-text-muted)', marginBottom: 16 }}>
+                    Available time slots:
+                  </p>
+
+                  <div style={{ marginBottom: 20 }}>
+                    {daySlots.map(slot => {
+                      const booked = isSlotBooked(slot);
+                      return (
+                        <div key={slot.id} className={`slot ${booked ? 'slot-booked' : 'slot-open'}`}>
+                          <div>
+                            <div className="slot-time">
+                              {formatTime(slot.start_time)} – {formatTime(slot.end_time)}
+                            </div>
+                            <div className="slot-rate">£{slot.hourly_rate}/hour</div>
+                          </div>
+                          <span className={`slot-badge ${booked ? 'booked' : 'open'}`}>
+                            {booked ? 'Booked' : 'Open'}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {success && (
+                    <div className="success-banner">
+                      <div className="emoji">🎉</div>
+                      <div className="title">Booking Request Sent!</div>
+                      <div className="desc">You'll receive a confirmation soon.</div>
+                    </div>
+                  )}
+
+                  <h4 style={{ fontSize: 14, fontWeight: 700, marginBottom: 12 }}>
+                    Request a Booking
+                  </h4>
+
+                  <div className="form-group">
+                    <label className="form-label">Your Name *</label>
+                    <input className="form-input" value={form.name}
+                      onChange={e => update('name', e.target.value)} placeholder="Jane Smith" />
+                  </div>
+
+                  <div className="form-row form-row-2" style={{ marginBottom: 12 }}>
+                    <div>
+                      <label className="form-label">Email</label>
+                      <input className="form-input" value={form.email}
+                        onChange={e => update('email', e.target.value)} placeholder="jane@email.com" />
+                    </div>
+                    <div>
+                      <label className="form-label">Phone</label>
+                      <input className="form-input" value={form.phone}
+                        onChange={e => update('phone', e.target.value)} placeholder="07700 900000" />
+                    </div>
+                  </div>
+
+                  <div className="form-row form-row-3" style={{ marginBottom: 12 }}>
+                    <div>
+                      <label className="form-label">Start Time *</label>
+                      <select className="form-select" value={form.startTime}
+                        onChange={e => update('startTime', e.target.value)}>
+                        <option value="">Select</option>
+                        {TIME_SLOTS.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="form-label">End Time *</label>
+                      <select className="form-select" value={form.endTime}
+                        onChange={e => update('endTime', e.target.value)}>
+                        <option value="">Select</option>
+                        {TIME_SLOTS.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="form-label">Children</label>
+                      <select className="form-select" value={form.children}
+                        onChange={e => update('children', e.target.value)}>
+                        {[1, 2, 3, 4].map(n => <option key={n} value={n}>{n}</option>)}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label">Notes</label>
+                    <textarea className="form-textarea" value={form.notes}
+                      onChange={e => update('notes', e.target.value)}
+                      placeholder="Any special requirements..." />
+                  </div>
+
+                  <button
+                    className="btn btn-primary btn-full"
+                    disabled={!form.name || !form.startTime || !form.endTime || submitting}
+                    onClick={handleSubmit}
+                  >
+                    {submitting ? 'Submitting...' : 'Request Booking'}
+                  </button>
+                </div>
+              ) : (
+                <div className="empty-state">
+                  <div className="emoji">📅</div>
+                  <p>No availability on this date</p>
+                  <p className="hint">Try selecting a date with a green dot.</p>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="empty-state" style={{ padding: '60px 20px' }}>
+              <div className="emoji" style={{ fontSize: 48 }}>👈</div>
+              <p style={{ fontSize: 16 }}>Select a date to get started</p>
+              <p className="hint">Green dots indicate available dates.</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
