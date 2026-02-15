@@ -1619,6 +1619,28 @@ body {
   color: var(--clr-text-muted);
 }
 
+.admin-cancel-btn {
+  margin-top: 8px;
+  width: 100%;
+  background: transparent;
+  color: var(--clr-text-faint);
+  border: 1.5px dashed var(--clr-border-input);
+  font-size: 12px;
+}
+
+.admin-cancel-btn:hover {
+  color: var(--clr-danger);
+  border-color: var(--clr-danger);
+  background: var(--clr-danger-bg);
+}
+
+.admin-cancel-reason {
+  color: var(--clr-text);
+  font-style: italic;
+  margin-top: 4px;
+  font-size: 13px;
+}
+
 .cancel-modal {
   max-width: 440px;
   text-align: center;

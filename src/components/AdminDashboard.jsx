@@ -8,7 +8,7 @@ import {
 import {
   getAvailability, getBookings, getAllBookings,
   addAvailabilitySlot, removeAvailabilitySlot,
-  updateBookingStatus, acceptBid,
+  updateBookingStatus, acceptBid, adminCancelBooking,
   getAllReviews, addReview, toggleReviewVisibility, deleteReview,
   getAllReferrals, addReferral, toggleReferral,
 } from '../lib/supabase';
@@ -35,6 +35,11 @@ export default function AdminDashboard({ user, onLogout }) {
   // Referral form
   const [refForm, setRefForm] = useState({ code: '', name: '', email: '', discount: '10' });
   const [addingRef, setAddingRef] = useState(false);
+
+  // Admin cancel modal
+  const [cancelModal, setCancelModal] = useState(null); // booking object or null
+  const [cancelReason, setCancelReason] = useState('');
+  const [adminCancelling, setAdminCancelling] = useState(false);
 
   useEffect(() => { loadData(); }, []);
 
@@ -128,6 +133,19 @@ export default function AdminDashboard({ user, onLogout }) {
 
   async function handleToggleReferral(id, active) {
     try { await toggleReferral(id, active); await loadData(); } catch { setError('Failed to update referral.'); }
+  }
+
+  // ─── Admin cancel handler ────────────────
+  async function handleAdminCancel() {
+    if (!cancelModal || !cancelReason.trim()) return;
+    setAdminCancelling(true);
+    try {
+      await adminCancelBooking(cancelModal.id, cancelReason.trim());
+      setCancelModal(null);
+      setCancelReason('');
+      await loadData();
+    } catch { setError('Failed to cancel booking.'); }
+    finally { setAdminCancelling(false); }
   }
 
   // ─── Computed ──────────────────────────────
@@ -271,19 +289,32 @@ export default function AdminDashboard({ user, onLogout }) {
                               <div className="accept-note">Accepting will auto-decline other overlapping bids</div>
                             </>
                           )}
+                          {(booking.status === 'pending' || booking.status === 'confirmed') && (
+                            <button
+                              className="btn btn-sm admin-cancel-btn"
+                              onClick={() => { setCancelModal(booking); setCancelReason(''); }}
+                            >
+                              🚫 Cancel Booking
+                            </button>
+                          )}
                           {booking.status === 'cancelled' && booking.cancellation_tier && (
                             <div className="admin-cancel-info">
                               <div className="admin-cancel-tag">
-                                🚫 Cancelled by customer
+                                {booking.cancellation_tier === 'admin' ? '🚫 Cancelled by admin' : '🚫 Cancelled by customer'}
                                 {booking.cancelled_at && (
                                   <span> · {new Date(booking.cancelled_at).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</span>
                                 )}
                               </div>
+                              {booking.admin_cancel_reason && (
+                                <div className="admin-cancel-reason">
+                                  Reason: "{booking.admin_cancel_reason}"
+                                </div>
+                              )}
                               <div className="admin-cancel-fee">
                                 {booking.cancellation_fee > 0 ? (
                                   <span>Fee owed: <strong>£{parseFloat(booking.cancellation_fee).toFixed(2)}</strong> ({booking.cancellation_tier} rate)</span>
                                 ) : (
-                                  <span>No charge (24hr+ notice)</span>
+                                  <span>No charge</span>
                                 )}
                               </div>
                             </div>
@@ -418,6 +449,72 @@ export default function AdminDashboard({ user, onLogout }) {
             <p style={{ fontSize: 13, color: 'var(--clr-text-muted)', marginBottom: 12 }}>
               To enable the WhatsApp button on the site, edit <code>src/components/WhatsAppButton.jsx</code> and set your number in the <code>WHATSAPP_NUMBER</code> constant. Format: country code + number without leading 0 (e.g. <code>447700900000</code>).
             </p>
+          </div>
+        </div>
+      )}
+
+      {/* ─── ADMIN CANCEL MODAL ─── */}
+      {cancelModal && (
+        <div className="modal-overlay" onClick={() => !adminCancelling && setCancelModal(null)}>
+          <div className="modal cancel-modal" onClick={e => e.stopPropagation()}>
+            <button className="modal-close" onClick={() => !adminCancelling && setCancelModal(null)}>×</button>
+
+            <div className="cancel-modal-header">
+              <span style={{ fontSize: 36 }}>🚫</span>
+              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 22, marginTop: 8 }}>
+                Cancel Booking
+              </h3>
+            </div>
+
+            <div className="cancel-booking-summary">
+              <div style={{ fontWeight: 700 }}>
+                {(() => {
+                  const [y, m, d] = cancelModal.date.split('-').map(Number);
+                  return `${d} ${MONTHS[m - 1]} ${y}`;
+                })()}
+              </div>
+              <div style={{ fontSize: 13, color: 'var(--clr-text-muted)' }}>
+                {cancelModal.customer_name} · {formatTime(cancelModal.start_time)} – {formatTime(cancelModal.end_time)}
+                {cancelModal.bid_amount && ` · £${cancelModal.bid_amount}/hr`}
+              </div>
+              <div style={{ fontSize: 12, marginTop: 4 }}>
+                <span className={`booking-status ${cancelModal.status}`} style={{ textTransform: 'capitalize' }}>{cancelModal.status}</span>
+              </div>
+            </div>
+
+            <div className="cancel-message">
+              {cancelModal.status === 'confirmed'
+                ? 'This is a confirmed booking. The customer will see this has been cancelled by admin and will not be charged.'
+                : 'This bid is still pending. Cancelling will remove it from the queue.'}
+            </div>
+
+            <div className="form-group" style={{ textAlign: 'left' }}>
+              <label className="form-label">Reason for cancellation *</label>
+              <textarea
+                className="form-textarea"
+                value={cancelReason}
+                onChange={e => setCancelReason(e.target.value)}
+                placeholder="e.g. Unable to babysit due to illness, family emergency, schedule conflict..."
+                style={{ minHeight: 80 }}
+              />
+            </div>
+
+            <div className="cancel-actions">
+              <button
+                className="btn btn-danger-outline btn-full"
+                onClick={handleAdminCancel}
+                disabled={!cancelReason.trim() || adminCancelling}
+              >
+                {adminCancelling ? 'Cancelling...' : 'Confirm Cancellation'}
+              </button>
+              <button
+                className="btn btn-outline btn-full"
+                onClick={() => setCancelModal(null)}
+                disabled={adminCancelling}
+              >
+                Keep Booking
+              </button>
+            </div>
           </div>
         </div>
       )}

@@ -118,6 +118,24 @@ export async function cancelBooking(id, { tier, fee, cancelledAt }) {
   return data;
 }
 
+export async function adminCancelBooking(id, reason) {
+  const { data, error } = await supabase
+    .from('bookings')
+    .update({
+      status: 'cancelled',
+      cancellation_tier: 'admin',
+      cancellation_fee: 0,
+      cancelled_at: new Date().toISOString(),
+      admin_cancel_reason: reason,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', id)
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+}
+
 // ─── Reviews ─────────────────────────────────────────────────
 
 export async function getVisibleReviews() {

@@ -235,7 +235,17 @@ export default function BookingStatus() {
                     {/* Cancellation info for already-cancelled bookings */}
                     {b.status === 'cancelled' && b.cancellation_tier && (
                       <div className="cancel-info-badge">
-                        {b.cancellation_fee > 0 ? (
+                        {b.cancellation_tier === 'admin' ? (
+                          <>
+                            <div style={{ fontWeight: 600, color: 'var(--clr-danger)', marginBottom: 2 }}>
+                              Cancelled by babysitter
+                            </div>
+                            {b.admin_cancel_reason && (
+                              <div>Reason: "{b.admin_cancel_reason}"</div>
+                            )}
+                            <div style={{ marginTop: 2 }}>No charge applies</div>
+                          </>
+                        ) : b.cancellation_fee > 0 ? (
                           <span>Cancellation fee: <strong>£{parseFloat(b.cancellation_fee).toFixed(2)}</strong> ({b.cancellation_tier})</span>
                         ) : (
                           <span>Cancelled — no charge</span>
