@@ -1597,7 +1597,7 @@ body {
 
 .cancel-policy-tier {
   border-left: 4px solid var(--clr-border);
-  padding: 10px 14px;
+  padding: 12px 16px;
   text-align: left;
   margin-bottom: 12px;
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
@@ -1606,21 +1606,26 @@ body {
 
 .cancel-policy-label {
   font-weight: 700;
-  font-size: 14px;
+  font-size: 15px;
   margin-bottom: 2px;
 }
 
 .cancel-policy-hours {
-  font-size: 12px;
-  color: var(--clr-text-faint);
+  font-size: 13px;
+  color: var(--clr-text-muted);
 }
 
 .cancel-message {
-  font-size: 14px;
-  color: var(--clr-text-muted);
+  font-size: 15px;
+  color: var(--clr-text);
   line-height: 1.6;
   margin-bottom: 16px;
   text-align: left;
+  font-weight: 500;
+  background: #fff8f0;
+  border: 1.5px solid #ffe0c2;
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
 }
 
 .cancel-fee-box {
