@@ -1,43 +1,25 @@
-import { useNavigate, useLocation } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 export default function Header({ isAdmin, onLoginClick, onLogout }) {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const path = location.pathname;
-
   return (
     <header className="header">
       <div className="header-inner">
-        <a className="logo" onClick={() => navigate('/')}>
-          <div className="logo-icon">🌟</div>
-          <div className="logo-text">
-            <h1>Little Stars</h1>
-            <span>Babysitting Services</span>
-          </div>
-        </a>
+        <NavLink to="/" className="logo">
+          <span className="logo-star">⭐</span>
+          <span className="logo-text">Little Stars</span>
+          <span className="logo-sub">Babysitting Services</span>
+        </NavLink>
 
-        <nav className="nav-pills">
-          <button
-            className={`nav-pill ${path === '/' ? 'active' : ''}`}
-            onClick={() => navigate('/')}
-          >
-            Home
-          </button>
-          <button
-            className={`nav-pill ${path === '/book' ? 'active' : ''}`}
-            onClick={() => navigate('/book')}
-          >
-            Book Now
-          </button>
-          <button
-            className={`nav-pill ${path === '/admin' ? 'active' : ''}`}
-            onClick={() => {
-              if (isAdmin) navigate('/admin');
-              else onLoginClick();
-            }}
-          >
-            {isAdmin ? 'Dashboard' : 'Login'}
-          </button>
+        <nav className="nav">
+          <NavLink to="/" end>Home</NavLink>
+          <NavLink to="/book">Book Now</NavLink>
+          <NavLink to="/about">About</NavLink>
+          <NavLink to="/status">My Bookings</NavLink>
+          {isAdmin ? (
+            <NavLink to="/admin">Dashboard</NavLink>
+          ) : (
+            <button className="nav-login" onClick={onLoginClick}>Login</button>
+          )}
         </nav>
       </div>
     </header>

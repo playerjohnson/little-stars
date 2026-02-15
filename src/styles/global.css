@@ -945,3 +945,507 @@ body {
   font-size: 18px;
   font-weight: 700;
 }
+
+/* ─── View Toggle ─────────────────────── */
+
+.view-toggle {
+  display: flex;
+  gap: 4px;
+  background: #f5ede8;
+  border-radius: 12px;
+  padding: 4px;
+  margin-bottom: 20px;
+  max-width: 260px;
+}
+
+.view-toggle-btn {
+  flex: 1;
+  background: transparent;
+  color: var(--clr-text-muted);
+  border: none;
+  border-radius: 10px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.view-toggle-btn.active {
+  background: var(--clr-text);
+  color: #fff;
+}
+
+/* ─── List View Slots ─────────────────── */
+
+.list-slot {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--clr-border);
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.list-slot:hover { border-color: var(--clr-primary); background: #fff9f5; }
+.list-slot-selected { border-color: var(--clr-primary); background: #fff3eb; }
+
+.list-slot-date {
+  text-align: center;
+  min-width: 50px;
+}
+
+.list-slot-day { font-size: 22px; font-weight: 700; line-height: 1; }
+.list-slot-month { font-size: 11px; color: var(--clr-text-muted); text-transform: uppercase; font-weight: 600; }
+.list-slot-weekday { font-size: 11px; color: var(--clr-text-faint); }
+
+.list-slot-details { flex: 1; }
+.list-slot-time { font-weight: 600; font-size: 14px; }
+.list-slot-rate { font-size: 12px; color: var(--clr-primary); font-weight: 600; }
+.list-slot-action { font-size: 12px; color: var(--clr-primary); font-weight: 600; }
+
+/* ─── Repeat Booking Note ─────────────── */
+
+.repeat-booking-note {
+  font-size: 13px;
+  background: #f0f9f4;
+  color: var(--clr-success);
+  border: 1px solid #c6e6d3;
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+/* ─── Referral Code ───────────────────── */
+
+.referral-success {
+  font-size: 12px;
+  color: var(--clr-success);
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+/* ─── Reviews Section ─────────────────── */
+
+.reviews-section {
+  margin: 40px 0;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 26px;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.reviews-summary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.reviews-avg {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--clr-text);
+}
+
+.reviews-count {
+  font-size: 13px;
+  color: var(--clr-text-muted);
+}
+
+.review-stars { font-size: 16px; }
+.star-filled { color: #f0a030; }
+.star-empty { color: #ddd; }
+
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.review-card {
+  padding: 20px;
+}
+
+.review-text {
+  font-size: 14px;
+  color: var(--clr-text-muted);
+  line-height: 1.6;
+  margin: 8px 0;
+  font-style: italic;
+}
+
+.review-author {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--clr-text);
+}
+
+/* ─── Reviews Admin ───────────────────── */
+
+.star-select {
+  display: flex;
+  gap: 4px;
+}
+
+.star-btn {
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: #ddd;
+  transition: color 0.15s;
+  padding: 0;
+}
+
+.star-btn.active { color: #f0a030; }
+
+.review-admin-card {
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--clr-border);
+  margin-bottom: 8px;
+}
+
+.review-hidden { opacity: 0.5; background: #fafafa; }
+
+.review-hidden-label {
+  font-size: 11px;
+  color: var(--clr-warning);
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+.btn-xs {
+  padding: 4px 8px;
+  font-size: 11px;
+}
+
+/* ─── Referral Cards (admin) ──────────── */
+
+.referral-card {
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--clr-border);
+  margin-bottom: 8px;
+}
+
+.referral-inactive { opacity: 0.5; }
+
+.referral-code-display {
+  font-size: 18px;
+  font-weight: 700;
+  font-family: 'Courier New', monospace;
+  color: var(--clr-primary);
+  letter-spacing: 1px;
+}
+
+/* ─── Booking Status ──────────────────── */
+
+.status-card {
+  margin-bottom: 12px;
+}
+
+.status-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.status-badge-large {
+  text-align: center;
+  flex-shrink: 0;
+  padding-left: 16px;
+}
+
+/* ─── About Page ──────────────────────── */
+
+.about-hero {
+  text-align: center;
+  padding: 40px 24px;
+  margin-bottom: 24px;
+}
+
+.about-avatar {
+  font-size: 60px;
+  margin-bottom: 12px;
+}
+
+.about-tagline {
+  font-size: 16px;
+  color: var(--clr-text-muted);
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.about-section-title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+.about-text {
+  font-size: 14px;
+  color: var(--clr-text-muted);
+  line-height: 1.7;
+}
+
+.about-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.about-badge {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: #f5ede8;
+  border-radius: var(--radius-sm);
+}
+
+.about-badge-icon { font-size: 24px; flex-shrink: 0; }
+.about-badge-title { font-weight: 700; font-size: 14px; }
+.about-badge-desc { font-size: 12px; color: var(--clr-text-muted); }
+
+/* ─── Cancellation Policy ─────────────── */
+
+.policy-content { margin-top: 8px; }
+
+.policy-tier {
+  padding: 16px 20px;
+  border-radius: var(--radius-md);
+  margin-bottom: 12px;
+  border-left: 4px solid;
+}
+
+.policy-tier-green { background: #f0f9f4; border-color: var(--clr-success); }
+.policy-tier-amber { background: #fef8f0; border-color: var(--clr-warning); }
+.policy-tier-red { background: #fef0f0; border-color: var(--clr-danger); }
+
+.policy-tier-header {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.policy-tier-icon { font-size: 24px; flex-shrink: 0; }
+.policy-tier-header h3 { font-size: 15px; margin: 0; }
+.policy-tier-result { font-size: 13px; font-weight: 700; color: var(--clr-text); }
+.policy-tier p { font-size: 13px; color: var(--clr-text-muted); line-height: 1.6; margin: 0; }
+
+.policy-note {
+  padding: 16px 20px;
+  background: var(--clr-surface-muted);
+  border-radius: var(--radius-md);
+  margin-bottom: 12px;
+}
+
+.policy-note h3 { font-size: 15px; margin: 0 0 6px; }
+.policy-note p { font-size: 13px; color: var(--clr-text-muted); line-height: 1.6; margin: 0; }
+
+/* ─── Admin Tabs ──────────────────────── */
+
+.admin-tabs {
+  display: flex;
+  gap: 4px;
+  background: #f5ede8;
+  border-radius: 12px;
+  padding: 4px;
+  margin-bottom: 24px;
+}
+
+.admin-tab {
+  flex: 1;
+  background: transparent;
+  color: var(--clr-text-muted);
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.admin-tab.active {
+  background: var(--clr-text);
+  color: #fff;
+}
+
+.admin-tab.active .filter-badge {
+  background: rgba(255,255,255,0.3);
+}
+
+/* ─── Notification Bell ───────────────── */
+
+.notif-wrapper { position: relative; }
+
+.notif-bell {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 6px;
+  position: relative;
+}
+
+.notif-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: var(--clr-danger);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  min-width: 16px;
+  height: 16px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+}
+
+.notif-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 320px;
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-md);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  z-index: 100;
+  overflow: hidden;
+}
+
+.notif-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--clr-border);
+}
+
+.notif-clear {
+  background: none;
+  border: none;
+  color: var(--clr-primary);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.notif-empty {
+  padding: 24px 16px;
+  text-align: center;
+  color: var(--clr-text-faint);
+  font-size: 13px;
+}
+
+.notif-list { max-height: 300px; overflow-y: auto; }
+
+.notif-item {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--clr-border);
+}
+
+.notif-item:last-child { border-bottom: none; }
+.notif-item-title { font-size: 13px; }
+.notif-item-desc { font-size: 12px; color: var(--clr-text-faint); margin-top: 2px; }
+
+/* ─── CTA Section ─────────────────────── */
+
+.cta-section {
+  text-align: center;
+  padding: 40px 24px;
+  background: var(--clr-surface-muted);
+  border-radius: var(--radius-lg);
+  margin-top: 32px;
+}
+
+.cta-section h2 {
+  font-family: var(--font-display);
+  font-size: 26px;
+  margin-bottom: 8px;
+}
+
+.cta-section p {
+  color: var(--clr-text-muted);
+  font-size: 15px;
+  margin-bottom: 20px;
+}
+
+/* ─── WhatsApp FAB ────────────────────── */
+
+.whatsapp-fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  background: #25D366;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+  z-index: 200;
+  transition: transform 0.2s, box-shadow 0.2s;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.whatsapp-fab:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* ─── Nav Login Button ────────────────── */
+
+.nav-login {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.85);
+  padding: 6px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.nav-login:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}

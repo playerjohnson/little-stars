@@ -3,21 +3,39 @@ import Calendar from './Calendar';
 import {
   DAYS_FULL, MONTHS, TIME_SLOTS, formatTime, timeToMinutes,
 } from '../lib/utils';
-import { getAvailability, getBookings, createBooking } from '../lib/supabase';
+import { getAvailability, getBookings, createBooking, getReferralByCode, incrementReferralUsage } from '../lib/supabase';
 
-const EMPTY_FORM = { name: '', email: '', phone: '', children: '1', startTime: '', endTime: '', bidAmount: '', notes: '' };
+const SAVED_KEY = 'littlestars-customer';
+
+function loadSavedCustomer() {
+  try {
+    return JSON.parse(localStorage.getItem(SAVED_KEY)) || {};
+  } catch { return {}; }
+}
+
+const EMPTY_FORM = { name: '', email: '', phone: '', children: '1', startTime: '', endTime: '', bidAmount: '', notes: '', referralCode: '' };
 
 export default function BookingPage() {
+  const saved = loadSavedCustomer();
   const [selectedDate, setSelectedDate] = useState(null);
   const [availability, setAvailability] = useState([]);
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [viewMode, setViewMode] = useState('calendar'); // 'calendar' | 'list'
 
-  const [form, setForm] = useState(EMPTY_FORM);
+  const [form, setForm] = useState({
+    ...EMPTY_FORM,
+    name: saved.name || '',
+    email: saved.email || '',
+    phone: saved.phone || '',
+    children: saved.children || '1',
+  });
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [bidError, setBidError] = useState('');
+  const [referralValid, setReferralValid] = useState(null); // null | true | false
+  const [referralDiscount, setReferralDiscount] = useState(0);
 
   useEffect(() => { loadData(); }, []);
 
@@ -44,13 +62,9 @@ export default function BookingPage() {
 
   const daySlots = availability.filter(a => a.date === selectedDate);
   const dayBookings = bookings.filter(b => b.date === selectedDate);
+  const minRate = daySlots.length > 0 ? Math.min(...daySlots.map(s => parseFloat(s.min_rate))) : 0;
+  const hasContact = form.email.trim() || form.phone.trim();
 
-  // Find the minimum rate for selected date (for validation)
-  const minRate = daySlots.length > 0
-    ? Math.min(...daySlots.map(s => parseFloat(s.min_rate)))
-    : 0;
-
-  // Count active bids per slot
   function getBidCount(slot) {
     return dayBookings.filter(
       b => b.status === 'pending' &&
@@ -67,7 +81,6 @@ export default function BookingPage() {
     );
   }
 
-  // Find the highest current bid for a slot
   function getHighestBid(slot) {
     const bids = dayBookings.filter(
       b => (b.status === 'pending' || b.status === 'confirmed') &&
@@ -81,19 +94,28 @@ export default function BookingPage() {
 
   function validateBid() {
     const amount = parseFloat(form.bidAmount);
-    if (!form.bidAmount || isNaN(amount)) {
-      setBidError('Please enter a bid amount.');
-      return false;
-    }
-    if (amount < minRate) {
-      setBidError(`Minimum bid is £${minRate}/hr.`);
-      return false;
-    }
+    if (!form.bidAmount || isNaN(amount)) { setBidError('Please enter a bid amount.'); return false; }
+    if (amount < minRate) { setBidError(`Minimum bid is £${minRate}/hr.`); return false; }
     setBidError('');
     return true;
   }
 
-  const hasContact = form.email.trim() || form.phone.trim();
+  async function checkReferralCode() {
+    if (!form.referralCode.trim()) { setReferralValid(null); setReferralDiscount(0); return; }
+    try {
+      const ref = await getReferralByCode(form.referralCode.trim());
+      if (ref) {
+        setReferralValid(true);
+        setReferralDiscount(ref.discount_percent);
+      } else {
+        setReferralValid(false);
+        setReferralDiscount(0);
+      }
+    } catch {
+      setReferralValid(false);
+      setReferralDiscount(0);
+    }
+  }
 
   async function handleSubmit() {
     if (!selectedDate || !form.name || !form.startTime || !form.endTime || !hasContact) return;
@@ -102,6 +124,11 @@ export default function BookingPage() {
     setSubmitting(true);
     setError(null);
     try {
+      // Save customer details for repeat booking
+      localStorage.setItem(SAVED_KEY, JSON.stringify({
+        name: form.name, email: form.email, phone: form.phone, children: form.children,
+      }));
+
       await createBooking({
         date: selectedDate,
         start_time: form.startTime,
@@ -112,8 +139,17 @@ export default function BookingPage() {
         num_children: parseInt(form.children),
         notes: form.notes || null,
         bid_amount: parseFloat(form.bidAmount),
+        referral_code: form.referralCode.trim().toUpperCase() || null,
       });
-      setForm(EMPTY_FORM);
+
+      // Increment referral usage
+      if (referralValid && form.referralCode.trim()) {
+        await incrementReferralUsage(form.referralCode.trim()).catch(() => {});
+      }
+
+      setForm(prev => ({ ...prev, startTime: '', endTime: '', bidAmount: '', notes: '', referralCode: '' }));
+      setReferralValid(null);
+      setReferralDiscount(0);
       setSuccess(true);
       setTimeout(() => setSuccess(false), 5000);
       await loadData();
@@ -130,7 +166,15 @@ export default function BookingPage() {
     if (field === 'bidAmount') setBidError('');
   }
 
-  // Display date
+  // Multi-week list view data
+  function getUpcomingSlots() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return availability
+      .filter(a => new Date(a.date) >= today)
+      .slice(0, 21);
+  }
+
   let displayDate = '';
   if (selectedDate) {
     const [y, m, d] = selectedDate.split('-').map(Number);
@@ -146,22 +190,68 @@ export default function BookingPage() {
 
       {error && <div className="error-banner">{error}</div>}
 
+      {/* View Toggle */}
+      <div className="view-toggle">
+        <button className={`view-toggle-btn ${viewMode === 'calendar' ? 'active' : ''}`}
+          onClick={() => setViewMode('calendar')}>📅 Calendar</button>
+        <button className={`view-toggle-btn ${viewMode === 'list' ? 'active' : ''}`}
+          onClick={() => setViewMode('list')}>📋 List View</button>
+      </div>
+
       <div className="grid-2">
-        {/* Calendar */}
+        {/* Left: Calendar or List */}
         <div className="card">
           {loading ? (
-            <div className="loading">Loading calendar...</div>
-          ) : (
+            <div className="loading">Loading...</div>
+          ) : viewMode === 'calendar' ? (
             <Calendar
               selectedDate={selectedDate}
               onSelectDate={setSelectedDate}
               availability={availability}
               bookings={bookings}
             />
+          ) : (
+            <div>
+              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 18, marginBottom: 16 }}>
+                Upcoming Availability
+              </h3>
+              {getUpcomingSlots().length === 0 ? (
+                <div className="empty-state">
+                  <div className="emoji">📅</div>
+                  <p>No upcoming availability</p>
+                </div>
+              ) : (
+                getUpcomingSlots().map(slot => {
+                  const [y, m, d] = slot.date.split('-').map(Number);
+                  const dateObj = new Date(y, m - 1, d);
+                  const isSelected = slot.date === selectedDate;
+                  return (
+                    <div
+                      key={slot.id}
+                      className={`list-slot ${isSelected ? 'list-slot-selected' : ''}`}
+                      onClick={() => setSelectedDate(slot.date)}
+                    >
+                      <div className="list-slot-date">
+                        <div className="list-slot-day">{d}</div>
+                        <div className="list-slot-month">{MONTHS[m - 1].slice(0, 3)}</div>
+                        <div className="list-slot-weekday">{DAYS_FULL[dateObj.getDay()].slice(0, 3)}</div>
+                      </div>
+                      <div className="list-slot-details">
+                        <div className="list-slot-time">
+                          {formatTime(slot.start_time)} – {formatTime(slot.end_time)}
+                        </div>
+                        <div className="list-slot-rate">From £{slot.min_rate}/hr</div>
+                      </div>
+                      <div className="list-slot-action">Select →</div>
+                    </div>
+                  );
+                })
+              )}
+            </div>
           )}
         </div>
 
-        {/* Booking Panel */}
+        {/* Right: Booking Form */}
         <div className="card">
           {selectedDate ? (
             <div>
@@ -180,28 +270,20 @@ export default function BookingPage() {
                       const confirmed = isSlotConfirmed(slot);
                       const bidCount = getBidCount(slot);
                       const highBid = getHighestBid(slot);
-
                       return (
                         <div key={slot.id} className={`slot ${confirmed ? 'slot-booked' : 'slot-open'}`}>
                           <div>
-                            <div className="slot-time">
-                              {formatTime(slot.start_time)} – {formatTime(slot.end_time)}
-                            </div>
-                            <div className="slot-rate-from">
-                              From <strong>£{slot.min_rate}</strong>/hr
-                            </div>
+                            <div className="slot-time">{formatTime(slot.start_time)} – {formatTime(slot.end_time)}</div>
+                            <div className="slot-rate-from">From <strong>£{slot.min_rate}</strong>/hr</div>
                             {bidCount > 0 && !confirmed && (
                               <div className="slot-bid-info">
-                                🔥 {bidCount} bid{bidCount > 1 ? 's' : ''} placed
-                                {highBid && <> · highest £{highBid}/hr</>}
+                                🔥 {bidCount} bid{bidCount > 1 ? 's' : ''}{highBid && <> · highest £{highBid}/hr</>}
                               </div>
                             )}
                           </div>
-                          <div style={{ textAlign: 'right' }}>
-                            <span className={`slot-badge ${confirmed ? 'booked' : 'open'}`}>
-                              {confirmed ? 'Booked' : 'Open'}
-                            </span>
-                          </div>
+                          <span className={`slot-badge ${confirmed ? 'booked' : 'open'}`}>
+                            {confirmed ? 'Booked' : 'Open'}
+                          </span>
                         </div>
                       );
                     })}
@@ -215,9 +297,13 @@ export default function BookingPage() {
                     </div>
                   )}
 
-                  <h4 style={{ fontSize: 14, fontWeight: 700, marginBottom: 12 }}>
-                    Place Your Bid
-                  </h4>
+                  <h4 style={{ fontSize: 14, fontWeight: 700, marginBottom: 12 }}>Place Your Bid</h4>
+
+                  {saved.name && (
+                    <div className="repeat-booking-note">
+                      👋 Welcome back, {saved.name}! Your details have been filled in.
+                    </div>
+                  )}
 
                   <div className="form-group">
                     <label className="form-label">Your Name *</label>
@@ -269,9 +355,7 @@ export default function BookingPage() {
                         <span className="bid-currency">£</span>
                         <input
                           className={`form-input bid-input ${bidError ? 'input-error' : ''}`}
-                          type="number"
-                          step="0.50"
-                          min={minRate}
+                          type="number" step="0.50" min={minRate}
                           value={form.bidAmount}
                           onChange={e => update('bidAmount', e.target.value)}
                           placeholder={`${minRate} min`}
@@ -287,6 +371,25 @@ export default function BookingPage() {
                         {[1, 2, 3, 4].map(n => <option key={n} value={n}>{n}</option>)}
                       </select>
                     </div>
+                  </div>
+
+                  {/* Referral Code */}
+                  <div className="form-group">
+                    <label className="form-label">Referral Code</label>
+                    <div style={{ display: 'flex', gap: 8 }}>
+                      <input className="form-input" value={form.referralCode}
+                        onChange={e => { update('referralCode', e.target.value); setReferralValid(null); }}
+                        placeholder="e.g. FRIEND10"
+                        style={{ flex: 1, textTransform: 'uppercase' }} />
+                      <button className="btn btn-outline btn-sm" onClick={checkReferralCode}
+                        disabled={!form.referralCode.trim()} type="button">Apply</button>
+                    </div>
+                    {referralValid === true && (
+                      <div className="referral-success">✅ Code applied! {referralDiscount}% discount</div>
+                    )}
+                    {referralValid === false && (
+                      <div className="field-error">Invalid or expired referral code</div>
+                    )}
                   </div>
 
                   <div className="form-group">

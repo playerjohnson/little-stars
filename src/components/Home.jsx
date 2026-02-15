@@ -1,4 +1,5 @@
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import Reviews from './Reviews';
 
 const FEATURES = [
   { icon: '🕐', title: 'Flexible Hours', desc: 'Morning, afternoon, and evening slots available to fit your schedule' },
@@ -14,30 +15,26 @@ const STEPS = [
 ];
 
 export default function Home() {
-  const navigate = useNavigate();
-
   return (
     <div>
+      {/* Hero */}
       <div className="hero">
-        <div className="hero-emoji">👶✨</div>
-        <h1>Caring, Reliable<br />Babysitting</h1>
+        <span className="hero-star">⭐</span>
+        <h1>Little Stars<br />Babysitting</h1>
         <p>
           Trusted childcare with flexible scheduling. Browse available dates,
           place your bid, and secure the slot that works for your family.
         </p>
         <div className="hero-buttons">
-          <button className="btn btn-primary" onClick={() => navigate('/book')}>
-            Book a Session →
-          </button>
-          <button className="btn btn-outline" onClick={() => navigate('/book')}>
-            View Availability
-          </button>
+          <Link to="/book" className="btn btn-primary">Book Now</Link>
+          <Link to="/about" className="btn btn-outline">About Me</Link>
         </div>
       </div>
 
+      {/* Features */}
       <div className="features-grid">
-        {FEATURES.map((f, i) => (
-          <div key={i} className="card feature-card">
+        {FEATURES.map(f => (
+          <div key={f.title} className="card feature-card">
             <div className="feature-icon">{f.icon}</div>
             <h3>{f.title}</h3>
             <p>{f.desc}</p>
@@ -45,18 +42,30 @@ export default function Home() {
         ))}
       </div>
 
-      <div className="card" style={{ padding: 36, textAlign: 'center' }}>
-        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 28, marginBottom: 24 }}>
-          How It Works
-        </h2>
-        <div className="steps">
-          {STEPS.map((s, i) => (
-            <div key={i} className="step">
+      {/* How It Works */}
+      <div className="how-it-works">
+        <h2 className="section-title">How It Works</h2>
+        <div className="steps-grid">
+          {STEPS.map(s => (
+            <div key={s.step} className="step-card">
               <div className="step-number">{s.step}</div>
-              <div className="step-title">{s.label}</div>
-              <div className="step-desc">{s.desc}</div>
+              <h3>{s.label}</h3>
+              <p>{s.desc}</p>
             </div>
           ))}
+        </div>
+      </div>
+
+      {/* Reviews */}
+      <Reviews />
+
+      {/* CTA */}
+      <div className="cta-section">
+        <h2>Ready to Book?</h2>
+        <p>Check my availability and secure your slot today.</p>
+        <div className="hero-buttons">
+          <Link to="/book" className="btn btn-primary">View Calendar</Link>
+          <Link to="/status" className="btn btn-outline">Check Booking Status</Link>
         </div>
       </div>
     </div>

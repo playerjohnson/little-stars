@@ -5,7 +5,7 @@ const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJ
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// ─── Availability API ────────────────────────────────────────
+// ─── Availability ────────────────────────────────────────────
 
 export async function getAvailability(startDate, endDate) {
   const { data, error } = await supabase
@@ -16,32 +16,23 @@ export async function getAvailability(startDate, endDate) {
     .eq('is_active', true)
     .order('date')
     .order('start_time');
-
   if (error) throw error;
   return data;
 }
 
 export async function addAvailabilitySlot(slot) {
   const { data, error } = await supabase
-    .from('availability')
-    .insert([slot])
-    .select()
-    .single();
-
+    .from('availability').insert([slot]).select().single();
   if (error) throw error;
   return data;
 }
 
 export async function removeAvailabilitySlot(id) {
-  const { error } = await supabase
-    .from('availability')
-    .delete()
-    .eq('id', id);
-
+  const { error } = await supabase.from('availability').delete().eq('id', id);
   if (error) throw error;
 }
 
-// ─── Bookings / Bids API ─────────────────────────────────────
+// ─── Bookings / Bids ────────────────────────────────────────
 
 export async function getBookings(startDate, endDate) {
   const { data, error } = await supabase
@@ -51,7 +42,6 @@ export async function getBookings(startDate, endDate) {
     .lte('date', endDate)
     .order('date')
     .order('bid_amount', { ascending: false });
-
   if (error) throw error;
   return data;
 }
@@ -62,18 +52,13 @@ export async function getAllBookings() {
     .select('*')
     .order('date', { ascending: false })
     .order('bid_amount', { ascending: false });
-
   if (error) throw error;
   return data;
 }
 
 export async function createBooking(booking) {
   const { data, error } = await supabase
-    .from('bookings')
-    .insert([booking])
-    .select()
-    .single();
-
+    .from('bookings').insert([booking]).select().single();
   if (error) throw error;
   return data;
 }
@@ -82,30 +67,19 @@ export async function updateBookingStatus(id, status) {
   const { data, error } = await supabase
     .from('bookings')
     .update({ status, updated_at: new Date().toISOString() })
-    .eq('id', id)
-    .select()
-    .single();
-
+    .eq('id', id).select().single();
   if (error) throw error;
   return data;
 }
 
-/**
- * Accept a bid: confirm it and auto-decline all other pending bids
- * that overlap the same time window on the same date.
- */
 export async function acceptBid(bid) {
   const { data: accepted, error: acceptError } = await supabase
     .from('bookings')
     .update({ status: 'confirmed', updated_at: new Date().toISOString() })
-    .eq('id', bid.id)
-    .select()
-    .single();
-
+    .eq('id', bid.id).select().single();
   if (acceptError) throw acceptError;
 
-  // Decline other pending bids on the same date with overlapping times
-  const { error: declineError } = await supabase
+  await supabase
     .from('bookings')
     .update({ status: 'declined', updated_at: new Date().toISOString() })
     .eq('date', bid.date)
@@ -114,7 +88,111 @@ export async function acceptBid(bid) {
     .lt('start_time', bid.end_time)
     .gt('end_time', bid.start_time);
 
-  if (declineError) throw declineError;
-
   return accepted;
+}
+
+export async function getBookingsByEmail(email) {
+  const { data, error } = await supabase
+    .from('bookings')
+    .select('*')
+    .ilike('customer_email', email)
+    .order('date', { ascending: false });
+  if (error) throw error;
+  return data;
+}
+
+// ─── Reviews ─────────────────────────────────────────────────
+
+export async function getVisibleReviews() {
+  const { data, error } = await supabase
+    .from('reviews')
+    .select('*')
+    .eq('is_visible', true)
+    .order('created_at', { ascending: false });
+  if (error) throw error;
+  return data;
+}
+
+export async function getAllReviews() {
+  const { data, error } = await supabase
+    .from('reviews')
+    .select('*')
+    .order('created_at', { ascending: false });
+  if (error) throw error;
+  return data;
+}
+
+export async function addReview(review) {
+  const { data, error } = await supabase
+    .from('reviews').insert([review]).select().single();
+  if (error) throw error;
+  return data;
+}
+
+export async function toggleReviewVisibility(id, isVisible) {
+  const { error } = await supabase
+    .from('reviews').update({ is_visible: isVisible }).eq('id', id);
+  if (error) throw error;
+}
+
+export async function deleteReview(id) {
+  const { error } = await supabase.from('reviews').delete().eq('id', id);
+  if (error) throw error;
+}
+
+// ─── Referrals ───────────────────────────────────────────────
+
+export async function getReferralByCode(code) {
+  const { data, error } = await supabase
+    .from('referrals')
+    .select('*')
+    .eq('referral_code', code.toUpperCase())
+    .eq('is_active', true)
+    .single();
+  if (error && error.code !== 'PGRST116') throw error;
+  return data;
+}
+
+export async function getAllReferrals() {
+  const { data, error } = await supabase
+    .from('referrals')
+    .select('*')
+    .order('created_at', { ascending: false });
+  if (error) throw error;
+  return data;
+}
+
+export async function addReferral(referral) {
+  const { data, error } = await supabase
+    .from('referrals').insert([referral]).select().single();
+  if (error) throw error;
+  return data;
+}
+
+export async function incrementReferralUsage(code) {
+  const ref = await getReferralByCode(code);
+  if (!ref) return;
+  await supabase
+    .from('referrals')
+    .update({ times_used: ref.times_used + 1 })
+    .eq('id', ref.id);
+}
+
+export async function toggleReferral(id, isActive) {
+  const { error } = await supabase
+    .from('referrals').update({ is_active: isActive }).eq('id', id);
+  if (error) throw error;
+}
+
+// ─── Notifications (polling new bids) ────────────────────────
+
+export async function getNewBidsSince(since) {
+  const { data, error } = await supabase
+    .from('bookings')
+    .select('*')
+    .eq('status', 'pending')
+    .gt('created_at', since)
+    .order('created_at', { ascending: false });
+  if (error) throw error;
+  return data;
 }
