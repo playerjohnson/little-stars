@@ -157,10 +157,24 @@ const GUIDES = [
 ];
 
 function renderMarkdown(text) {
-  // Basic markdown: **bold** and \n for line breaks
-  return text
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\n/g, '<br/>');
+  // Split by line breaks first
+  const lines = text.split('\n');
+  const elements = [];
+  lines.forEach((line, li) => {
+    // Split by bold markers **text**
+    const parts = line.split(/\*\*(.*?)\*\*/g);
+    parts.forEach((part, pi) => {
+      if (pi % 2 === 1) {
+        elements.push(<strong key={`${li}-${pi}`}>{part}</strong>);
+      } else if (part) {
+        elements.push(part);
+      }
+    });
+    if (li < lines.length - 1) {
+      elements.push(<br key={`br-${li}`} />);
+    }
+  });
+  return elements;
 }
 
 export default function Guides() {
@@ -215,10 +229,9 @@ export default function Guides() {
                     <div className="guide-section-number">{i + 1}</div>
                     <div className="guide-section-content">
                       <h3 className="guide-section-heading">{section.heading}</h3>
-                      <p
-                        className="guide-section-text"
-                        dangerouslySetInnerHTML={{ __html: renderMarkdown(section.content) }}
-                      />
+                      <p className="guide-section-text">
+                        {renderMarkdown(section.content)}
+                      </p>
                     </div>
                   </div>
                 ))}

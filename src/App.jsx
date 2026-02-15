@@ -32,8 +32,27 @@ export default function App() {
   const [authLoading, setAuthLoading] = useState(true);
   const [showLogin, setShowLogin] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   usePageTracking();
+
+  // SEO: Dynamic page titles
+  useEffect(() => {
+    const titles = {
+      '/': 'Little Stars — Trusted Babysitting in Peterborough',
+      '/book': 'Book a Babysitter in Peterborough | Little Stars',
+      '/my-bookings': 'My Bookings | Little Stars',
+      '/about': 'About Your Babysitter | Little Stars',
+      '/guides': 'Booking Guides & Help | Little Stars',
+      '/terms': 'Terms & Conditions | Little Stars',
+      '/cancellation': 'Cancellation Policy | Little Stars',
+      '/privacy': 'Privacy Policy | Little Stars',
+      '/safeguarding': 'Safeguarding Policy | Little Stars',
+      '/accessibility': 'Accessibility Statement | Little Stars',
+      '/admin': 'Admin Dashboard | Little Stars',
+    };
+    document.title = titles[location.pathname] || 'Little Stars — Trusted Babysitting in Peterborough';
+  }, [location.pathname]);
 
   useEffect(() => {
     getCurrentUser().then(u => { setUser(u); setAuthLoading(false); });
@@ -76,7 +95,7 @@ export default function App() {
       </div>
 
       <footer className="footer">
-        <p>Little Stars Babysitting © {new Date().getFullYear()} · Made with 💛</p>
+        <p>Little Stars Babysitting · Peterborough © {new Date().getFullYear()}</p>
         <div className="footer-links">
           <Link to="/about">About</Link>
           <Link to="/guides">Help & Guides</Link>

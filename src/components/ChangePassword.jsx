@@ -12,8 +12,12 @@ export default function ChangePassword() {
   async function handleSubmit(e) {
     e?.preventDefault();
 
-    if (newPassword.length < 6) {
-      setError('Password must be at least 6 characters.');
+    if (newPassword.length < 8) {
+      setError('Password must be at least 8 characters.');
+      return;
+    }
+    if (!/[A-Z]/.test(newPassword) || !/[a-z]/.test(newPassword) || !/[0-9]/.test(newPassword)) {
+      setError('Password must include uppercase, lowercase, and a number.');
       return;
     }
     if (newPassword !== confirmPassword) {

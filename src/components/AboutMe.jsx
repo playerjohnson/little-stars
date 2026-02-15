@@ -10,7 +10,7 @@ export default function AboutMe() {
           About Me
         </h1>
         <p className="about-tagline">
-          Hi! I'm your local babysitter, and I love looking after little ones.
+          Hi! I'm your local Peterborough babysitter, and I love looking after little ones.
         </p>
       </div>
 

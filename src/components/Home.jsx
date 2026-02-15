@@ -22,9 +22,9 @@ export default function Home() {
         <span className="hero-star">⭐</span>
         <h1>Little Stars<br />Babysitting</h1>
         <p>
-          Trusted in-home childcare with flexible scheduling. I come to you so
-          your children stay comfortable. Browse available dates, place your bid,
-          and secure the slot that works for your family.
+          Trusted in-home childcare in Peterborough with flexible scheduling.
+          I come to you so your children stay comfortable. Browse available dates,
+          place your bid, and secure the slot that works for your family.
         </p>
         <div className="hero-buttons">
           <Link to="/book" className="btn btn-primary">Book Now</Link>
