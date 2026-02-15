@@ -805,6 +805,14 @@ body {
   line-height: 1.6;
 }
 
+.hero-trust {
+  font-size: 14px;
+  color: var(--clr-primary);
+  font-weight: 600;
+  margin: -16px auto 28px;
+  letter-spacing: 0.3px;
+}
+
 .hero-buttons {
   display: flex;
   gap: 12px;

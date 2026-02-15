@@ -285,7 +285,7 @@ export default function BookingPage() {
   return (
     <div>
       <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 30, marginBottom: 24 }}>
-        Book a Session
+        Book Naomi
       </h2>
 
       {error && <div className="error-banner">{error}</div>}
@@ -317,7 +317,7 @@ export default function BookingPage() {
               {getUpcomingSlots().length === 0 ? (
                 <div className="empty-state">
                   <div className="emoji">📅</div>
-                  <p>No upcoming availability</p>
+                  <p>I'm fully booked right now — check back soon!</p>
                 </div>
               ) : (
                 getUpcomingSlots().map(slot => {
@@ -452,7 +452,11 @@ export default function BookingPage() {
                     </div>
                   ) : (
                     <>
-                      <h4 style={{ fontSize: 14, fontWeight: 700, marginBottom: 12 }}>Place Your Bid</h4>
+                      <h4 style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>Place Your Bid</h4>
+                      <p style={{ fontSize: 12, color: 'var(--clr-text-muted)', marginBottom: 12, lineHeight: 1.5 }}>
+                        Choose what suits your budget — from £{minRate}/hr. Most bids are accepted!{' '}
+                        <Link to="/guides" style={{ color: 'var(--clr-primary)', textDecoration: 'underline' }}>How does bidding work?</Link>
+                      </p>
 
                       {saved.name && (
                         <div className="repeat-booking-note">
@@ -596,7 +600,7 @@ export default function BookingPage() {
               ) : (
                 <div className="empty-state">
                   <div className="emoji">📅</div>
-                  <p>No availability on this date</p>
+                  <p>I'm not available on this date — try another!</p>
                   <p className="hint">Try selecting a date with a green dot.</p>
                 </div>
               )}

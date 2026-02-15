@@ -7,7 +7,7 @@ export default function Header({ isAdmin, onLoginClick, onLogout }) {
         <NavLink to="/" className="logo">
           <span className="logo-star">⭐</span>
           <span className="logo-text">Little Stars</span>
-          <span className="logo-sub">Babysitting Services</span>
+          <span className="logo-sub">Babysitting by Naomi</span>
         </NavLink>
 
         <nav className="nav">

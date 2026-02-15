@@ -1,33 +1,51 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Reviews from './Reviews';
+import { getVisibleReviews } from '../lib/supabase';
 
 const FEATURES = [
-  { icon: '🏠', title: 'In Your Home', desc: 'All sessions take place at your home — your children stay in their own environment' },
-  { icon: '🕐', title: 'Flexible Hours', desc: 'Morning, afternoon, and evening slots available to fit your schedule' },
-  { icon: '💝', title: 'Experienced Care', desc: 'DBS checked, first aid trained, with years of childcare experience' },
-  { icon: '📱', title: 'Easy Booking', desc: 'Pick a date, place your bid, and get a quick response' },
+  { icon: '🏠', title: 'In Your Home', desc: 'I come to you — your little ones stay in their own environment, happy and comfortable' },
+  { icon: '🕐', title: 'Flexible Hours', desc: 'Morning, afternoon, and evening slots available to fit around your life' },
+  { icon: '💝', title: 'Safe & Experienced', desc: 'DBS checked, paediatric first aid trained, with years of hands-on childcare experience' },
+  { icon: '📱', title: 'Easy Booking', desc: 'Pick a date, choose your budget, and I\'ll get back to you within a few hours' },
 ];
 
 const STEPS = [
-  { step: '1', label: 'Check Calendar', desc: 'Green dots show available dates' },
-  { step: '2', label: 'Place a Bid', desc: 'Choose a slot and offer your hourly rate' },
-  { step: '3', label: 'Get Confirmed', desc: 'Best bid wins — you\'ll know quickly!' },
+  { step: '1', label: 'Check the Calendar', desc: 'Green dots show the dates I\'m available' },
+  { step: '2', label: 'Place Your Bid', desc: 'Choose a slot and offer what suits your budget — from £12/hr' },
+  { step: '3', label: 'Get Confirmed', desc: 'I\'ll review your bid and confirm — most are accepted!' },
 ];
 
 export default function Home() {
+  const [reviewStats, setReviewStats] = useState(null);
+
+  useEffect(() => {
+    getVisibleReviews().then(reviews => {
+      if (reviews && reviews.length > 0) {
+        const avg = (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length).toFixed(1);
+        setReviewStats({ count: reviews.length, avg });
+      }
+    }).catch(() => {});
+  }, []);
+
   return (
     <div>
       {/* Hero */}
       <div className="hero">
         <span className="hero-star">⭐</span>
-        <h1>Little Stars<br />Babysitting</h1>
+        <h1>Hi, I'm Naomi!</h1>
         <p>
-          Trusted in-home childcare in Peterborough with flexible scheduling.
-          I come to you so your children stay comfortable. Browse available dates,
-          place your bid, and secure the slot that works for your family.
+          I'm a Peterborough babysitter who comes to your home so your little ones
+          stay happy and comfortable. Browse my available dates, pick what suits
+          your budget, and I'll take care of the rest.
         </p>
+        {reviewStats && (
+          <p className="hero-trust">
+            Trusted by Peterborough families · ⭐ {reviewStats.avg} from {reviewStats.count} review{reviewStats.count !== 1 ? 's' : ''}
+          </p>
+        )}
         <div className="hero-buttons">
-          <Link to="/book" className="btn btn-primary">Book Now</Link>
+          <Link to="/book" className="btn btn-primary">Book Naomi</Link>
           <Link to="/about" className="btn btn-outline">About Me</Link>
         </div>
       </div>
@@ -63,12 +81,12 @@ export default function Home() {
       {/* CTA */}
       <div className="cta-section">
         <h2>Ready to Book?</h2>
-        <p>Check my availability and secure your slot today.</p>
+        <p>Check my available dates and secure your slot — I'd love to look after your little ones.</p>
         <div className="hero-buttons">
           <Link to="/book" className="btn btn-primary">View Calendar</Link>
           <Link to="/status" className="btn btn-outline">Check Booking Status</Link>
         </div>
-        <Link to="/guides" className="cta-help-link">📖 New here? Read our booking guides</Link>
+        <Link to="/guides" className="cta-help-link">📖 New here? Read the booking guides</Link>
       </div>
     </div>
   );

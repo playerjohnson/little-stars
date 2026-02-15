@@ -40,9 +40,9 @@ export default function App() {
   useEffect(() => {
     const titles = {
       '/': 'Little Stars — Trusted Babysitting in Peterborough',
-      '/book': 'Book a Babysitter in Peterborough | Little Stars',
+      '/book': 'Book Naomi — Babysitting in Peterborough | Little Stars',
       '/my-bookings': 'My Bookings | Little Stars',
-      '/about': 'About Your Babysitter | Little Stars',
+      '/about': 'Meet Naomi — Your Peterborough Babysitter | Little Stars',
       '/guides': 'Booking Guides & Help | Little Stars',
       '/terms': 'Terms & Conditions | Little Stars',
       '/cancellation': 'Cancellation Policy | Little Stars',
@@ -95,7 +95,7 @@ export default function App() {
       </div>
 
       <footer className="footer">
-        <p>Little Stars Babysitting · Peterborough © {new Date().getFullYear()}</p>
+        <p>Little Stars · Babysitting by Naomi · Peterborough © {new Date().getFullYear()}</p>
         <div className="footer-links">
           <Link to="/about">About</Link>
           <Link to="/guides">Help & Guides</Link>
