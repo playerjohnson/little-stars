@@ -251,6 +251,11 @@ body {
 
 .form-textarea { min-height: 60px; resize: vertical; }
 
+.form-select option:disabled {
+  color: #bbb;
+  text-decoration: line-through;
+}
+
 .form-group { margin-bottom: 12px; }
 
 .form-row {

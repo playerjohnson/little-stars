@@ -102,6 +102,7 @@ export default function BookingPage() {
 
   // ─── Time range filtering ──────────────────────────
   // Only show times within the available slot window(s)
+  // Disable times that fall within confirmed bookings
 
   function getAvailableTimeRange() {
     if (daySlots.length === 0) return { earliest: null, latest: null };
@@ -110,20 +111,40 @@ export default function BookingPage() {
     return { earliest, latest };
   }
 
+  function getConfirmedRanges() {
+    return dayBookings
+      .filter(b => b.status === 'confirmed')
+      .map(b => ({ start: timeToMinutes(b.start_time), end: timeToMinutes(b.end_time) }));
+  }
+
+  function isTimeInConfirmedRange(mins, isEndTime = false) {
+    const confirmed = getConfirmedRanges();
+    return confirmed.some(r => {
+      if (isEndTime) return mins > r.start && mins <= r.end;
+      return mins >= r.start && mins < r.end;
+    });
+  }
+
   const { earliest: slotStart, latest: slotEnd } = getAvailableTimeRange();
 
   const startTimeOptions = TIME_SLOTS.filter(t => {
     if (slotStart === null) return true;
     const mins = timeToMinutes(t.value);
     return mins >= slotStart && mins < slotEnd;
-  });
+  }).map(t => ({
+    ...t,
+    booked: isTimeInConfirmedRange(timeToMinutes(t.value), false),
+  }));
 
   const endTimeOptions = TIME_SLOTS.filter(t => {
     if (slotStart === null) return true;
     const mins = timeToMinutes(t.value);
     const afterStart = form.startTime ? mins > timeToMinutes(form.startTime) : true;
     return mins > slotStart && mins <= slotEnd && afterStart;
-  });
+  }).map(t => ({
+    ...t,
+    booked: isTimeInConfirmedRange(timeToMinutes(t.value), true),
+  }));
 
   // ─── Minimum bid calculation ───────────────────────
   // Must be higher than the current highest pending bid, or the min_rate
@@ -465,7 +486,11 @@ export default function BookingPage() {
                           <select className="form-select" value={form.startTime}
                             onChange={e => update('startTime', e.target.value)}>
                             <option value="">Select</option>
-                            {startTimeOptions.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+                            {startTimeOptions.map(t => (
+                              <option key={t.value} value={t.value} disabled={t.booked}>
+                                {t.label}{t.booked ? ' (Booked)' : ''}
+                              </option>
+                            ))}
                           </select>
                         </div>
                         <div>
@@ -473,7 +498,11 @@ export default function BookingPage() {
                           <select className="form-select" value={form.endTime}
                             onChange={e => update('endTime', e.target.value)}>
                             <option value="">Select</option>
-                            {endTimeOptions.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+                            {endTimeOptions.map(t => (
+                              <option key={t.value} value={t.value} disabled={t.booked}>
+                                {t.label}{t.booked ? ' (Booked)' : ''}
+                              </option>
+                            ))}
                           </select>
                         </div>
                       </div>
