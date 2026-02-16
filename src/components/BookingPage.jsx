@@ -230,10 +230,10 @@ export default function BookingPage() {
       setReferralDiscount(0);
       setTermsAccepted(false);
       setSuccess(true);
-      setTimeout(() => setSuccess(false), 5000);
+      setTimeout(() => setSuccess(false), 15000);
       await loadData();
     } catch (err) {
-      setError('Failed to submit bid. Please try again.');
+      setError('Failed to submit request. Please try again.');
       console.error(err);
     } finally {
       setSubmitting(false);
@@ -348,7 +348,7 @@ export default function BookingPage() {
                           <div className="list-slot-status-booked">✅ Booked</div>
                         )}
                         {!booked && bidCount > 0 && (
-                          <div className="list-slot-status-bids">🔥 {bidCount} bid{bidCount > 1 ? 's' : ''}</div>
+                          <div className="list-slot-status-bids">🔥 {bidCount} request{bidCount > 1 ? 's' : ''}</div>
                         )}
                       </div>
                       <div className="list-slot-action">
@@ -405,7 +405,7 @@ export default function BookingPage() {
 
                             {!confirmed && bidCount > 0 && (
                               <div className="slot-bid-info">
-                                🔥 {bidCount} bid{bidCount > 1 ? 's' : ''}
+                                🔥 {bidCount} request{bidCount > 1 ? 's' : ''}
                                 {highBid && <> · highest £{highBid}/hr</>}
                               </div>
                             )}
@@ -438,8 +438,11 @@ export default function BookingPage() {
                   {success && (
                     <div className="success-banner">
                       <div className="emoji">🎉</div>
-                      <div className="title">Bid Submitted!</div>
-                      <div className="desc">You'll be notified if your bid is accepted.</div>
+                      <div className="title">Booking Request Sent!</div>
+                      <div className="desc">I'll review your request and get back to you within a few hours.</div>
+                      <div style={{ marginTop: 8, fontSize: 12, color: 'var(--clr-text-muted)' }}>
+                        Check <Link to="/status" style={{ color: 'var(--clr-primary)' }}>My Bookings</Link> anytime to see the status.
+                      </div>
                     </div>
                   )}
 
@@ -452,10 +455,10 @@ export default function BookingPage() {
                     </div>
                   ) : (
                     <>
-                      <h4 style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>Place Your Bid</h4>
+                      <h4 style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>Choose Your Rate</h4>
                       <p style={{ fontSize: 12, color: 'var(--clr-text-muted)', marginBottom: 12, lineHeight: 1.5 }}>
-                        Choose what suits your budget — from £{minRate}/hr. Most bids are accepted!{' '}
-                        <Link to="/guides" style={{ color: 'var(--clr-primary)', textDecoration: 'underline' }}>How does bidding work?</Link>
+                        Pick what suits your budget — from £{minRate}/hr. Most requests are accepted!{' '}
+                        <Link to="/guides" style={{ color: 'var(--clr-primary)', textDecoration: 'underline' }}>How does it work?</Link>
                       </p>
 
                       {saved.name && (
@@ -517,7 +520,7 @@ export default function BookingPage() {
 
                       <div className="form-row form-row-2" style={{ marginBottom: 12 }}>
                         <div>
-                          <label className="form-label">Your Bid (£/hr) *</label>
+                          <label className="form-label">Your Rate (£/hr) *</label>
                           <div className="bid-input-wrapper">
                             <span className="bid-currency">£</span>
                             <input
@@ -531,8 +534,8 @@ export default function BookingPage() {
                           {bidError && <div className="field-error">{bidError}</div>}
                           <div className="bid-hint">
                             {effectiveMinBid > minRate
-                              ? `Must beat current highest bid · Minimum £${effectiveMinBid.toFixed(2)}/hr`
-                              : `Minimum £${minRate}/hr · Higher bids are more likely to be accepted`}
+                              ? `Someone else has requested this slot · Minimum £${effectiveMinBid.toFixed(2)}/hr`
+                              : `Minimum £${minRate}/hr · Higher rates are more likely to be confirmed`}
                           </div>
                         </div>
                         <div>
@@ -592,7 +595,7 @@ export default function BookingPage() {
                         disabled={!form.name || !form.startTime || !form.endTime || !form.bidAmount || !hasContact || !termsAccepted || submitting}
                         onClick={handleSubmit}
                       >
-                        {submitting ? 'Submitting...' : `Submit Bid — £${form.bidAmount || '0'}/hr`}
+                        {submitting ? 'Sending...' : `Request Booking — £${form.bidAmount || '0'}/hr`}
                       </button>
                     </>
                   )}

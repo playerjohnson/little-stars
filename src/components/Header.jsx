@@ -12,7 +12,7 @@ export default function Header({ isAdmin, onLoginClick, onLogout }) {
 
         <nav className="nav">
           <NavLink to="/" end>Home</NavLink>
-          <NavLink to="/book">Book Now</NavLink>
+          <NavLink to="/book">Book Naomi</NavLink>
           <NavLink to="/about">About</NavLink>
           <NavLink to="/status">My Bookings</NavLink>
           {isAdmin ? (

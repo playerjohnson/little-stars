@@ -12,8 +12,8 @@ const FEATURES = [
 
 const STEPS = [
   { step: '1', label: 'Check the Calendar', desc: 'Green dots show the dates I\'m available' },
-  { step: '2', label: 'Place Your Bid', desc: 'Choose a slot and offer what suits your budget — from £12/hr' },
-  { step: '3', label: 'Get Confirmed', desc: 'I\'ll review your bid and confirm — most are accepted!' },
+  { step: '2', label: 'Choose Your Rate', desc: 'Pick a slot and offer what suits your budget — from £12/hr' },
+  { step: '3', label: 'Get Confirmed', desc: 'I\'ll review your request and confirm — most are accepted!' },
 ];
 
 export default function Home() {

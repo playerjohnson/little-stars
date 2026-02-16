@@ -110,9 +110,9 @@ export default function AboutMe() {
         <div className="card">
           <h3 className="about-section-title">💷 Pricing</h3>
           <p className="about-text">
-            My rates start from <strong>£12/hr</strong>. I use a simple bidding system —
+            My rates start from <strong>£12/hr</strong>. I use a flexible pricing system —
             you choose what works for your budget (at or above the minimum) and I'll
-            confirm within a few hours. Most bids are accepted! It keeps things fair
+            confirm within a few hours. Most requests are accepted! It keeps things fair
             and flexible for everyone.
           </p>
           <Link to="/book" className="btn btn-primary btn-sm" style={{ marginTop: 12 }}>

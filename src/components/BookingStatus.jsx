@@ -88,10 +88,10 @@ export default function BookingStatus() {
         booking,
         tier: {
           tier: 'free',
-          label: 'Withdraw Bid',
+          label: 'Withdraw Request',
           icon: '👋',
           color: 'var(--clr-text-muted)',
-          message: 'Your bid hasn\'t been confirmed yet, so there\'s no cancellation charge. You can always place a new bid later.',
+          message: 'Your request hasn\'t been confirmed yet, so there\'s no cancellation charge. You can always request another date.',
           fee: 0,
           isPending: true,
         },
@@ -129,9 +129,9 @@ export default function BookingStatus() {
 
   function statusInfo(status) {
     switch (status) {
-      case 'pending': return { label: 'Pending', emoji: '⏳', color: 'var(--clr-warning)', desc: 'Your bid is being reviewed.' };
+      case 'pending': return { label: 'Pending', emoji: '⏳', color: 'var(--clr-warning)', desc: 'Your request is being reviewed.' };
       case 'confirmed': return { label: 'Confirmed', emoji: '✅', color: 'var(--clr-success)', desc: 'Your booking is confirmed!' };
-      case 'declined': return { label: 'Declined', emoji: '❌', color: 'var(--clr-danger)', desc: 'Another bid was accepted.' };
+      case 'declined': return { label: 'Declined', emoji: '❌', color: 'var(--clr-danger)', desc: 'Unfortunately this slot has been filled.' };
       case 'cancelled': return { label: 'Cancelled', emoji: '🚫', color: 'var(--clr-text-faint)', desc: '' };
       default: return { label: status, emoji: '❓', color: 'var(--clr-text-muted)', desc: '' };
     }
@@ -153,7 +153,7 @@ export default function BookingStatus() {
         Check Booking Status
       </h2>
       <p style={{ color: 'var(--clr-text-muted)', fontSize: 14, marginBottom: 24 }}>
-        Enter the email address you used when placing your bid.
+        Enter the email address you used when making your booking request.
       </p>
 
       <div className="card" style={{ maxWidth: 500 }}>
@@ -268,7 +268,7 @@ export default function BookingStatus() {
                         style={{ marginTop: 12, width: '100%' }}
                         onClick={() => handleCancelClick(b)}
                       >
-                        {b.status === 'pending' ? 'Withdraw Bid' : 'Cancel Booking'}
+                        {b.status === 'pending' ? 'Withdraw Request' : 'Cancel Booking'}
                       </button>
                     )}
                   </div>
@@ -288,7 +288,7 @@ export default function BookingStatus() {
             <div className="cancel-modal-header">
               <span style={{ fontSize: 36 }}>{cancelModal.tier.icon}</span>
               <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 22, marginTop: 8 }}>
-                {cancelModal.tier.isPending ? 'Withdraw Bid?' : 'Cancel Booking?'}
+                {cancelModal.tier.isPending ? 'Withdraw Request?' : 'Cancel Booking?'}
               </h3>
             </div>
 

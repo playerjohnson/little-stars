@@ -6,15 +6,15 @@ const GUIDES = [
     id: 'how-to-book',
     icon: '📅',
     title: 'How to Book a Session',
-    summary: 'A step-by-step guide to finding a date and placing your first bid.',
+    summary: 'A step-by-step guide to finding a date and booking Naomi.',
     sections: [
       {
         heading: 'Step 1: Browse Available Dates',
-        content: `Head to the **Book Now** page. You'll see a calendar with green dots on dates that have availability. You can also switch to **List View** to see all upcoming slots in one go — this is handy if you're flexible on dates.`,
+        content: `Head to the **Book Naomi** page. You'll see a calendar with green dots on dates that have availability. You can also switch to **List View** to see all upcoming slots in one go — this is handy if you're flexible on dates.`,
       },
       {
         heading: 'Step 2: Pick a Date',
-        content: `Click on a date with a green dot. The right-hand panel will show the available time slots for that day, including the minimum hourly rate and how many bids have already been placed.`,
+        content: `Click on a date with a green dot. The right-hand panel will show the available time slots for that day, including the minimum hourly rate and how many requests have already been made.`,
       },
       {
         heading: 'Step 3: Fill in Your Details',
@@ -25,40 +25,40 @@ const GUIDES = [
         content: `Select your preferred start and end time from the dropdowns. These only show times within the available window, so you can't accidentally pick an invalid time. Any times that are already booked will appear greyed out.`,
       },
       {
-        heading: 'Step 5: Place Your Bid',
-        content: `Enter how much you'd like to pay per hour. There's a minimum rate, and if others have already bid, you'll need to bid higher than the current top bid. Higher bids are more likely to be accepted!`,
+        heading: 'Step 5: Choose Your Rate',
+        content: `Enter how much you'd like to pay per hour. There's a minimum rate, and if someone else has already requested the same slot, you may need to offer a higher rate. Most requests are accepted!`,
       },
       {
         heading: 'Step 6: Submit & Wait',
-        content: `Hit **Submit Bid** and you're done! You'll see a confirmation message. Your bid will be reviewed, and you'll be contacted once a decision is made. You can check your bid status anytime on the **My Bookings** page.`,
+        content: `Hit **Submit** and you're done! You'll see a confirmation message. Your request will be reviewed, and you'll be contacted once a decision is made. You can check your status anytime on the **My Bookings** page.`,
       },
     ],
   },
   {
-    id: 'bidding',
+    id: 'pricing',
     icon: '💷',
-    title: 'How Does Bidding Work?',
-    summary: 'Understand the bidding system and how to give yourself the best chance.',
+    title: 'How Does Pricing Work?',
+    summary: 'Understand the flexible pricing system and how to choose your rate.',
     sections: [
       {
-        heading: 'Why Bidding?',
-        content: `Instead of fixed prices, Little Stars uses a bidding system. This keeps things fair — you choose what you're happy to pay, and the best offer for each slot gets confirmed. It means flexible pricing that works for everyone.`,
+        heading: 'Why Flexible Pricing?',
+        content: `Instead of fixed prices, Little Stars uses a flexible pricing system. You choose what you're happy to pay (from the minimum rate), and Naomi reviews requests and confirms. It keeps things fair and flexible for everyone.`,
       },
       {
         heading: 'The Minimum Rate',
-        content: `Each available slot has a minimum hourly rate (e.g. "From £12/hr"). You can't bid below this amount. Think of it as the starting price.`,
+        content: `Each available slot has a minimum hourly rate (e.g. "From £12/hr"). You can't offer below this amount — think of it as the starting price.`,
       },
       {
-        heading: 'Competing Bids',
-        content: `If other people have already bid on the same slot, you'll see how many bids there are and the current highest bid. Your bid must be higher than the existing top bid to be considered. The slot cards show a ranked list of all current bids so you know exactly where you stand.`,
+        heading: 'Multiple Requests',
+        content: `If other parents have already requested the same slot, you'll see how many requests there are. If there's competition for a slot, offering a slightly higher rate can help. The slot cards show how many requests have been made so you know where you stand.`,
       },
       {
-        heading: 'When Is a Bid Accepted?',
-        content: `Bids are reviewed manually. The highest bid for each time slot is the most likely to be accepted, but other factors like timing and flexibility may also be considered. Once a bid is accepted, all other overlapping bids for that time are automatically declined.`,
+        heading: 'How Are Bookings Confirmed?',
+        content: `Requests are reviewed by Naomi personally. The offered rate is the main factor, but timing and flexibility may also be considered. Once a request is confirmed, other overlapping requests for that time are automatically declined.`,
       },
       {
-        heading: 'Tips for Success',
-        content: `Bid early to get in first. Be flexible with your times — if you can do a slightly different window, you might avoid competition. And of course, a higher bid always helps! You can also check back to see if new slots have been added.`,
+        heading: 'Tips',
+        content: `Book early to get in first. Be flexible with your times — if you can do a slightly different window, you might avoid competition. And of course, a higher rate always helps! You can also check back to see if new slots have been added.`,
       },
     ],
   },
@@ -66,7 +66,7 @@ const GUIDES = [
     id: 'check-status',
     icon: '🔍',
     title: 'Checking Your Booking Status',
-    summary: 'How to see if your bid has been accepted, declined, or is still pending.',
+    summary: 'How to see if your request has been confirmed, declined, or is still pending.',
     sections: [
       {
         heading: 'Go to My Bookings',
@@ -74,11 +74,11 @@ const GUIDES = [
       },
       {
         heading: 'Enter Your Email',
-        content: `Type in the same email address you used when placing your bid, then click **Check My Bookings**. Make sure it matches exactly — the search is based on your email.`,
+        content: `Type in the same email address you used when making your request, then click **Check My Bookings**. Make sure it matches exactly — the search is based on your email.`,
       },
       {
         heading: 'Understanding the Statuses',
-        content: `Each booking will show one of these statuses:\n\n⏳ **Pending** — Your bid is being reviewed. Sit tight!\n\n✅ **Confirmed** — Great news, your booking is confirmed!\n\n❌ **Declined** — Another bid was accepted for this slot. Try bidding on a different date or time.\n\n🚫 **Cancelled** — This booking was cancelled.`,
+        content: `Each booking will show one of these statuses:\n\n⏳ **Pending** — Your request is being reviewed. Sit tight!\n\n✅ **Confirmed** — Great news, your booking is confirmed!\n\n❌ **Declined** — Unfortunately this slot has been filled. Try requesting a different date or time.\n\n🚫 **Cancelled** — This booking was cancelled.`,
       },
       {
         heading: 'No Results?',
