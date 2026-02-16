@@ -107,7 +107,10 @@ export default function App() {
           <CookiePreferenceLink />
         </div>
         <p className="footer-credit">
-          Built by <a href="https://playerjohnson.github.io/freelance-dev/" target="_blank" rel="noopener noreferrer">Anthony Johnson</a>
+          Need a developer?{' '}
+          <a href="https://playerjohnson.github.io/freelance-dev/" target="_blank" rel="noopener noreferrer">
+            <strong>Hire Anthony D Johnson</strong> — Senior .NET &amp; Azure Developer →
+          </a>
         </p>
       </footer>
 
