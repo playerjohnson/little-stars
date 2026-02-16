@@ -30,10 +30,8 @@ export default function Header({ isAdmin, onLoginClick, onLogout }) {
           <NavLink to="/book">Book Naomi</NavLink>
           <NavLink to="/about">About</NavLink>
           <NavLink to="/status">My Bookings</NavLink>
-          {isAdmin ? (
+          {isAdmin && (
             <NavLink to="/admin">Dashboard</NavLink>
-          ) : (
-            <button className="nav-login" onClick={onLoginClick}>Login</button>
           )}
         </nav>
       </div>

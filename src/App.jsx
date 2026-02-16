@@ -89,7 +89,7 @@ export default function App() {
           <Route path="/admin" element={
             authLoading ? <div className="loading">Checking login...</div>
               : isAdmin ? <AdminDashboard user={user} onLogout={handleLogout} />
-              : <Home />
+              : <LoginModal onSuccess={handleLoginSuccess} onClose={() => navigate('/')} />
           } />
         </Routes>
       </div>
