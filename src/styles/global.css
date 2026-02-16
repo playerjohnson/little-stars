@@ -1107,6 +1107,25 @@ body {
   color: var(--clr-primary);
 }
 
+.footer-credit {
+  margin-top: 12px;
+  font-size: 11px;
+  color: var(--clr-text-faint);
+  opacity: 0.7;
+}
+
+.footer-credit a {
+  color: var(--clr-text-faint);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--clr-text-faint);
+  transition: color 0.2s;
+}
+
+.footer-credit a:hover {
+  color: var(--clr-primary);
+  border-bottom-color: var(--clr-primary);
+}
+
 /* ─── Cookie Banner ───────────────────── */
 
 .cookie-overlay {

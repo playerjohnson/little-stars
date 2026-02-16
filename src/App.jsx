@@ -106,6 +106,9 @@ export default function App() {
           <Link to="/accessibility">Accessibility</Link>
           <CookiePreferenceLink />
         </div>
+        <p className="footer-credit">
+          Built by <a href="https://playerjohnson.github.io/freelance-dev/" target="_blank" rel="noopener noreferrer">Anthony Johnson</a>
+        </p>
       </footer>
 
       <WhatsAppButton />
