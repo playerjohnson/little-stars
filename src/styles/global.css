@@ -904,6 +904,105 @@ body {
 .success-banner .title { font-weight: 700; color: #2d7a4d; }
 .success-banner .desc { font-size: 13px; color: #5a8a6a; }
 
+/* ─── Success Confirmation Card ─────── */
+
+.success-card {
+  background: var(--clr-success-bg);
+  border: 1.5px solid var(--clr-success);
+  border-radius: var(--radius-lg, 16px);
+  padding: 28px 24px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.success-card-header { margin-bottom: 24px; }
+
+.success-card-emoji { font-size: 36px; margin-bottom: 8px; }
+
+.success-card-title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: #2d7a4d;
+  margin: 0 0 6px;
+}
+
+.success-card-subtitle {
+  font-size: 14px;
+  color: #5a8a6a;
+  margin: 0;
+}
+
+.success-card-steps {
+  background: rgba(255,255,255,0.6);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  margin: 0 auto 24px;
+  max-width: 360px;
+  text-align: left;
+}
+
+.success-card-steps-title {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #2d7a4d;
+  margin: 0 0 16px;
+}
+
+.success-card-step {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+
+.success-card-step:last-child { margin-bottom: 0; }
+
+.success-card-step-num {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--clr-success);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+}
+
+.success-card-step strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--clr-text);
+  margin-bottom: 2px;
+}
+
+.success-card-step p {
+  font-size: 12px;
+  color: var(--clr-text-muted);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.success-card-link {
+  color: var(--clr-primary);
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.success-card-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
 /* ─── Footer ──────────────────────────── */
 
 .footer {
@@ -2188,5 +2287,19 @@ body {
   ::-webkit-scrollbar-track {
     background: var(--clr-surface-muted);
   }
+
+  /* Success confirmation card */
+  .success-card {
+    background: rgba(44, 80, 56, 0.2);
+    border-color: rgba(76, 175, 132, 0.4);
+  }
+
+  .success-card-steps {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .success-card-title { color: #7ecfa0; }
+  .success-card-subtitle { color: #9abda8; }
+  .success-card-steps-title { color: #7ecfa0; }
 }
 

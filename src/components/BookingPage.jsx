@@ -230,7 +230,6 @@ export default function BookingPage() {
       setReferralDiscount(0);
       setTermsAccepted(false);
       setSuccess(true);
-      setTimeout(() => setSuccess(false), 15000);
       await loadData();
     } catch (err) {
       setError('Failed to submit request. Please try again.');
@@ -436,12 +435,45 @@ export default function BookingPage() {
                   </div>
 
                   {success && (
-                    <div className="success-banner">
-                      <div className="emoji">🎉</div>
-                      <div className="title">Booking Request Sent!</div>
-                      <div className="desc">I'll review your request and get back to you within a few hours.</div>
-                      <div style={{ marginTop: 8, fontSize: 12, color: 'var(--clr-text-muted)' }}>
-                        Check <Link to="/status" style={{ color: 'var(--clr-primary)' }}>My Bookings</Link> anytime to see the status.
+                    <div className="success-card">
+                      <div className="success-card-header">
+                        <div className="success-card-emoji">🎉</div>
+                        <h3 className="success-card-title">Booking Request Sent!</h3>
+                        <p className="success-card-subtitle">
+                          Thanks{form.name ? `, ${form.name.split(' ')[0]}` : ''}! I've received your request.
+                        </p>
+                      </div>
+
+                      <div className="success-card-steps">
+                        <h4 className="success-card-steps-title">What happens next?</h4>
+                        <div className="success-card-step">
+                          <span className="success-card-step-num">1</span>
+                          <div>
+                            <strong>I'll review your request</strong>
+                            <p>I personally check every booking — usually within a couple of hours.</p>
+                          </div>
+                        </div>
+                        <div className="success-card-step">
+                          <span className="success-card-step-num">2</span>
+                          <div>
+                            <strong>You'll see the result</strong>
+                            <p>Check <Link to="/status" className="success-card-link">My Bookings</Link> anytime using your email to see if it's confirmed.</p>
+                          </div>
+                        </div>
+                        <div className="success-card-step">
+                          <span className="success-card-step-num">3</span>
+                          <div>
+                            <strong>That's it!</strong>
+                            <p>Once confirmed, I'll arrive at your home at the agreed time. Easy.</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="success-card-actions">
+                        <button className="btn btn-primary" onClick={() => { setSuccess(false); setSelectedDate(null); }}>
+                          📅 Book Another Date
+                        </button>
+                        <Link to="/status" className="btn btn-outline">Check My Bookings</Link>
                       </div>
                     </div>
                   )}
