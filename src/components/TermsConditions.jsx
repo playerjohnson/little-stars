@@ -12,7 +12,7 @@ export default function TermsConditions() {
         <p>
           These Terms &amp; Conditions ("Terms") govern the use of the Little Stars
           Babysitting website and the provision of babysitting services. By submitting
-          a bid through this website, you confirm that you have read, understood, and
+          a booking request through this website, you confirm that you have read, understood, and
           agree to be bound by these Terms.
         </p>
 
@@ -24,11 +24,11 @@ export default function TermsConditions() {
           <strong>"Client"</strong> refers to the parent or legal guardian booking
           the babysitting service.
           <br />
-          <strong>"Bid"</strong> refers to a booking request submitted through the
+          <strong>"Booking Request"</strong> refers to a request submitted through the
           website, including the proposed hourly rate.
           <br />
-          <strong>"Booking"</strong> refers to a confirmed arrangement where a Bid
-          has been accepted by the Service Provider.
+          <strong>"Booking"</strong> refers to a confirmed arrangement where a Booking
+          Request has been accepted by the Service Provider.
           <br />
           <strong>"Service"</strong> refers to in-home childcare provided by the
           Service Provider at the Client's home address.
@@ -48,27 +48,30 @@ export default function TermsConditions() {
           in writing beforehand), or care at the Service Provider's home.
         </p>
 
-        <h3>3. Bidding &amp; Contract Formation</h3>
+        <h3>3. Pricing &amp; Contract Formation</h3>
         <p>
-          The website operates a bidding system. Submitting a Bid constitutes an
+          The website operates a flexible pricing system. Submitting a Booking
+          Request constitutes an
           <strong> offer</strong> by the Client to engage the Service Provider at
           the proposed hourly rate for the specified date and time.
         </p>
         <p>
-          A Bid does not guarantee a Booking. The Service Provider reserves the
-          right to accept, decline, or not respond to any Bid at their sole
-          discretion.
+          A Booking Request does not guarantee a Booking. The Service Provider
+          reserves the right to accept, decline, or not respond to any Booking
+          Request at their sole discretion.
         </p>
         <p>
           A binding contract is formed only when the Service Provider explicitly
-          accepts a Bid, at which point the Bid status changes to "Confirmed."
-          The confirmed hourly rate is the rate stated in the accepted Bid.
+          accepts a Booking Request, at which point the status changes to
+          "Confirmed." The confirmed hourly rate is the rate stated in the
+          accepted Booking Request.
         </p>
         <p>
-          The minimum bid amount is displayed on the website for each available
-          slot. Bids below the stated minimum will not be accepted. Where multiple
-          Bids exist for the same slot, higher bids are more likely to be accepted,
-          but the Service Provider is not obligated to accept the highest bid.
+          The minimum rate is displayed on the website for each available
+          slot. Requests below the stated minimum will not be accepted. Where
+          multiple Booking Requests exist for the same slot, higher rates are
+          more likely to be accepted, but the Service Provider is not obligated
+          to accept the highest rate.
         </p>
 
         <h3>4. Payment</h3>
@@ -103,8 +106,8 @@ export default function TermsConditions() {
           received by the Service Provider to the start time of the Booking.
         </p>
         <p>
-          Bids that have not yet been accepted ("Pending" status) may be withdrawn
-          at any time without charge.
+          Booking Requests that have not yet been accepted ("Pending" status) may
+          be withdrawn at any time without charge.
         </p>
         <p>
           If the Service Provider needs to cancel a confirmed Booking, the Client
@@ -125,7 +128,7 @@ export default function TermsConditions() {
           (c) Ensure at least one parent or legal guardian is contactable by phone
           for the duration of the session.
           <br />
-          (d) Provide accurate contact information when submitting a Bid.
+          (d) Provide accurate contact information when submitting a Booking Request.
           <br />
           (e) Return home by the agreed end time. If the Client is late, additional
           charges may apply at the confirmed hourly rate.

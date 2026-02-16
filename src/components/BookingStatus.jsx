@@ -218,7 +218,7 @@ export default function BookingStatus() {
                         </div>
                         {b.bid_amount && (
                           <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--clr-success)', marginTop: 4 }}>
-                            Bid: £{b.bid_amount}/hr
+                            Rate: £{b.bid_amount}/hr
                           </div>
                         )}
                       </div>
@@ -360,7 +360,7 @@ export default function BookingStatus() {
                 {cancelling
                   ? 'Cancelling...'
                   : cancelModal.tier.isPending
-                    ? 'Yes, Withdraw My Bid'
+                    ? 'Yes, Withdraw My Request'
                     : cancelModal.tier.fee > 0
                       ? `Accept & Cancel (£${cancelModal.tier.fee.toFixed(2)} charge)`
                       : 'Yes, Cancel Booking'}

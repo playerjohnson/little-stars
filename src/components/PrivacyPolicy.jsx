@@ -40,7 +40,7 @@ export default function PrivacyPolicy() {
         </p>
         <p>
           Your name, email address and/or phone number, preferred date and time
-          slot, number of children, bid amount, any referral code used, any notes
+          slot, number of children, offered rate, any referral code used, any notes
           you provide, and whether you accepted the Terms &amp; Conditions
           (including the timestamp of acceptance).
         </p>
@@ -56,9 +56,9 @@ export default function PrivacyPolicy() {
           following legal bases:
         </p>
         <p>
-          <strong>Booking data (name, contact details, bid details):</strong>{' '}
+          <strong>Booking data (name, contact details, booking details):</strong>{' '}
           Performance of a contract (Article 6(1)(b)). We need this information
-          to process your booking request and, if your bid is accepted, to
+          to process your booking request and, if your request is accepted, to
           fulfil the babysitting service.
         </p>
         <p>
@@ -76,7 +76,7 @@ export default function PrivacyPolicy() {
         <h3>4. How we use your data</h3>
         <p>
           We use your personal data to: process and manage your booking requests,
-          contact you about the status of your bid (accepted, declined, or
+          contact you about the status of your booking request (accepted, declined, or
           pending), provide the babysitting service, apply referral code discounts,
           process cancellations in accordance with our cancellation policy, and
           improve the website based on anonymous usage patterns (with your consent).
@@ -115,11 +115,11 @@ export default function PrivacyPolicy() {
           <strong>Confirmed bookings:</strong> 2 years after the date of the
           booking, for service records and in case of any disputes.
           <br />
-          <strong>Pending bids (not accepted):</strong> 6 months after the
-          date of the bid, then deleted.
+          <strong>Pending requests (not accepted):</strong> 6 months after the
+          date of the request, then deleted.
           <br />
-          <strong>Declined bids:</strong> 6 months after the date of the
-          bid, then deleted.
+          <strong>Declined requests:</strong> 6 months after the date of the
+          request, then deleted.
           <br />
           <strong>Cancelled bookings:</strong> 12 months after cancellation,
           for cancellation policy records.
@@ -199,10 +199,11 @@ export default function PrivacyPolicy() {
 
         <h3>10. Automated decision-making</h3>
         <p>
-          The bidding system on this website automatically ranks bids by amount.
-          However, the final decision to accept or decline a bid is always made
-          manually by the Service Provider. No fully automated decisions with
-          legal or similarly significant effects are made about you.
+          The pricing system on this website automatically ranks booking requests
+          by offered rate. However, the final decision to accept or decline a
+          request is always made manually by the Service Provider. No fully
+          automated decisions with legal or similarly significant effects are
+          made about you.
         </p>
 
         <h3>11. Your rights</h3>

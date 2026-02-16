@@ -114,11 +114,11 @@ const GUIDES = [
     sections: [
       {
         heading: 'Green & Orange Dots',
-        content: `On the calendar, **green dots** mean there's availability on that date. **Orange dots** mean there are existing bookings (bids) on that date. A date can have both — meaning some slots are available and some have bids.`,
+        content: `On the calendar, **green dots** mean there's availability on that date. **Orange dots** mean there's a confirmed booking on that date. A date can have both — meaning some slots are available and others are already taken.`,
       },
       {
         heading: 'Calendar vs List View',
-        content: `Use **Calendar View** when you have specific dates in mind. Use **List View** when you're flexible and want to see everything that's coming up at a glance. List view also shows you which slots are already booked and how many bids each slot has.`,
+        content: `Use **Calendar View** when you have specific dates in mind. Use **List View** when you're flexible and want to see everything that's coming up at a glance. List view also shows you which slots are already booked and how many requests each slot has.`,
       },
       {
         heading: 'Navigating Months',
