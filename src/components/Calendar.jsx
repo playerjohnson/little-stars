@@ -16,7 +16,7 @@ export default function Calendar({ selectedDate, onSelectDate, availability, boo
 
   // Build lookup sets for quick checking
   const availDates = new Set((availability || []).map(a => a.date));
-  const bookedDates = new Set((bookings || []).map(b => b.date));
+  const bookedDates = new Set((bookings || []).filter(b => b.status === 'confirmed').map(b => b.date));
 
   const days = [];
   for (let i = 0; i < firstDay; i++) {

@@ -98,11 +98,11 @@ const GUIDES = [
       },
       {
         heading: 'How to Apply a Code',
-        content: `When placing your bid on the booking page, you'll see a **Referral Code** field near the bottom of the form. Type in the code (it's not case-sensitive) and click **Apply**. If the code is valid, you'll see a green confirmation with the discount percentage.`,
+        content: `When filling in the booking form, you'll see a **Referral Code** field near the bottom. Type in the code (it's not case-sensitive) and click **Apply**. If the code is valid, you'll see a green confirmation with the discount percentage.`,
       },
       {
         heading: 'When Does the Discount Apply?',
-        content: `The referral code is recorded with your booking. The discount is applied to the final agreed rate once your bid is accepted. It's a percentage off your hourly rate.`,
+        content: `The referral code is recorded with your booking. The discount is applied to the final agreed rate once your request is confirmed. It's a percentage off your hourly rate.`,
       },
     ],
   },
@@ -186,7 +186,7 @@ export default function Guides() {
         How to Use Little Stars
       </h2>
       <p style={{ color: 'var(--clr-text-muted)', fontSize: 14, marginBottom: 32 }}>
-        Everything you need to know about booking, bidding, and managing your sessions.
+        Everything you need to know about booking, pricing, and managing your sessions.
       </p>
 
       {!openGuide ? (

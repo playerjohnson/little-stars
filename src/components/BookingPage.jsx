@@ -378,7 +378,7 @@ export default function BookingPage() {
                   <p style={{ fontSize: 13, color: 'var(--clr-text-muted)', marginBottom: 16 }}>
                     {allSlotsConfirmed
                       ? 'All slots on this date are booked.'
-                      : 'Available slots — place your bid to book:'}
+                      : 'Available slots — choose your rate to book:'}
                   </p>
 
                   {/* Slot cards with bid info */}
