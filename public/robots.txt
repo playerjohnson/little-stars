@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://playerjohnson.github.io/little-stars/sitemap.xml
+Sitemap: https://anthonyjohnson.dev/little-stars/sitemap.xml

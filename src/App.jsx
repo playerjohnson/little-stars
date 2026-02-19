@@ -108,7 +108,7 @@ export default function App() {
         </div>
         <p className="footer-credit">
           Need a developer?{' '}
-          <a href="https://playerjohnson.github.io/freelance-dev/" target="_blank" rel="noopener noreferrer">
+          <a href="https://anthonyjohnson.dev/freelance-dev/" target="_blank" rel="noopener noreferrer">
             <strong>Hire Anthony D Johnson</strong> — Senior .NET &amp; Azure Developer →
           </a>
         </p>
